@@ -1,0 +1,10 @@
+{
+  "DEMO-MAPA-001": {
+    "main": "assets/materials/DEMO-MAPA-001/main.webp",
+    "gallery": [
+      "assets/materials/DEMO-MAPA-001/side.webp"
+    ],
+    "verified": false,
+    "description": "Ejemplo de asociación. Reemplazar con fotografías verificadas."
+  }
+}
