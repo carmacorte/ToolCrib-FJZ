@@ -1,0 +1,21 @@
+/* Tool Crib identity provenance, no accounts or authentication. */
+(function(){'use strict';
+const prefix='toolcrib_identity_v9_';
+const get=k=>{try{return localStorage.getItem(prefix+k)||''}catch{return ''}};
+const set=(k,v)=>{try{localStorage.setItem(prefix+k,String(v||''))}catch{}};
+const state={author:'',lastModifiedBy:'',fileName:'',source:'',terminal:get('terminal'),responsible:get('responsible')};
+function normalize(s){return String(s||'').trim().replace(/\s+/g,' ').slice(0,120)}
+function terminal(){return normalize(state.terminal)||'SIN-CONFIGURAR'}
+function responsible(){return normalize(state.responsible)||normalize(state.lastModifiedBy)||normalize(state.author)||''}
+function remember(v){state.responsible=normalize(v);set('responsible',state.responsible);updateUI()}
+function audit(user){return{terminal:terminal(),excelAuthor:state.author,excelLastModifiedBy:state.lastModifiedBy,identitySource:state.responsible?'Confirmación manual / sesión':'Responsable capturado en movimiento',excelFile:state.fileName}}
+function updateUI(){const t=document.getElementById('tc-id-terminal'),u=document.getElementById('tc-id-user'),p=document.getElementById('tc-id-provenance');if(t)t.value=state.terminal;if(u)u.value=state.responsible;if(p)p.textContent=state.fileName?'Excel: '+state.fileName+' · Autor: '+(state.author||'no disponible')+' · Último editor: '+(state.lastModifiedBy||'no disponible'):'Sin Excel identificado; captura manual disponible'}
+async function detectExcel(file){if(!file||!(/\.xlsx$/i.test(file.name)))return;try{if(typeof JSZip==='undefined')return;const z=await JSZip.loadAsync(await file.arrayBuffer());const f=z.file('docProps/core.xml');state.author='';state.lastModifiedBy='';state.fileName=file.name;state.source='xlsx-core-properties';if(f){const xml=new DOMParser().parseFromString(await f.async('string'),'application/xml');const nodes=xml.getElementsByTagName('*');for(const n of nodes){if(n.localName==='creator')state.author=normalize(n.textContent);if(n.localName==='lastModifiedBy')state.lastModifiedBy=normalize(n.textContent)}}updateUI()}catch(e){console.warn('No se pudo leer autoría Excel',e)}}
+window.ToolCribIdentity={responsible,remember,audit,detectExcel,terminal};
+const style=document.createElement('style');style.textContent='#tc-id-panel{position:fixed;right:16px;bottom:16px;z-index:1000;background:#fff;border:1px solid #d9e4f0;border-radius:12px;padding:12px;box-shadow:0 10px 30px #0002;max-width:min(350px,90vw)}#tc-id-panel summary{cursor:pointer;font-weight:700}#tc-id-panel label{display:block;margin:9px 0 3px;font-size:12px}#tc-id-panel input{width:100%;padding:7px;border:1px solid #c6d3df;border-radius:7px}#tc-id-provenance{font-size:11px;color:#63748a;margin-top:7px;overflow-wrap:anywhere}';document.head.append(style);
+const panel=document.createElement('details');panel.id='tc-id-panel';panel.innerHTML='<summary>Identificación de movimientos</summary><label for="tc-id-user">Responsable (nombre o número de reloj)</label><input id="tc-id-user" autocomplete="off" placeholder="Nombre o número de reloj"><label for="tc-id-terminal">Identificador de terminal</label><input id="tc-id-terminal" autocomplete="off" placeholder="TOOLCRIB-PC02"><p id="tc-id-provenance"></p><button type="button" id="tc-id-save">Guardar identificación</button>';document.body.append(panel);
+document.getElementById('tc-id-save').onclick=()=>{const u=normalize(document.getElementById('tc-id-user').value),t=normalize(document.getElementById('tc-id-terminal').value);if(!u){alert('Captura el nombre o número de reloj del responsable.');return}if(!t){alert('Configura un identificador de terminal.');return}state.terminal=t;set('terminal',t);remember(u);panel.open=false};
+document.addEventListener('change',e=>{const f=e.target?.files?.[0];if(f&&/\.xlsx$/i.test(f.name))detectExcel(f)},true);
+document.addEventListener('submit',e=>{if(e.target?.id!=='move-form')return;const u=document.getElementById('m-user')?.value?.trim();if(!u){e.preventDefault();e.stopImmediatePropagation();alert('Captura el responsable del movimiento.');return}if(!state.terminal){e.preventDefault();e.stopImmediatePropagation();panel.open=true;alert('Configura la terminal antes de guardar el movimiento.');return}},true);
+updateUI();
+})();
