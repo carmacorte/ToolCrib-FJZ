@@ -1,0 +1,50 @@
+name: Publish Tool Crib FJZ
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy Tool Crib Portal
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+      - name: Prepare public portal only
+        run: |
+          mkdir -p _site/js
+          cp index.html _site/index.html
+          cp js/identity-audit-v9.js _site/js/identity-audit-v9.js
+          cp js/visual-catalog-v8.js _site/js/visual-catalog-v8.js
+          if [ -d assets/materials ]; then
+            mkdir -p _site/assets
+            cp -R assets/materials _site/assets/materials
+          fi
+          if [ -f data/materials-images.json ]; then
+            mkdir -p _site/data
+            cp data/materials-images.json _site/data/materials-images.json
+          fi
+          touch _site/.nojekyll
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload portal
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Deploy and assign URL
+        id: deployment
+        uses: actions/deploy-pages@v4
