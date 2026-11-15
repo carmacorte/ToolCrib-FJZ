@@ -1334,11 +1334,11 @@ function paint(rows){
   node('circle',{cx:p[0],cy:p[1]+19,r:7,fill:'#3277a8',stroke:'#b1d3ee','stroke-width':2},svg);
  });
  node('polygon',{points:'40,111 101,151 101,555 40,518',fill:'url(#iso-side)',stroke:'#477eaf','stroke-width':2},svg);
- node('polygon',{points:'40,111 270,75 330,127 101,151',fill:'url(#iso-top)',stroke:'#8ac5ef','stroke-width':2},svg);
+ node('polygon',{points:'40,111 270,87 330,127 101,151',fill:'url(#iso-top)',stroke:'#8ac5ef','stroke-width':2},svg);
  node('polygon',{points:'101,151 330,127 330,546 101,569',fill:'url(#iso-front)',stroke:'#5a97bf','stroke-width':3},svg);
  node('path',{d:'M 102 568 L 330 546 L 330 559 L 101 581 Z',fill:'#1c496f',stroke:'#5b9bce'},svg);
  node('path',{d:'M 103 150 L 103 566 M 328 128 L 328 546',fill:'none',stroke:'#d3eeff','stroke-opacity':'.26','stroke-width':2},svg);
- [[58,112],[265,83],[108,152],[321,130]].forEach(function(p){node('circle',{cx:p[0],cy:p[1],r:2.3,fill:'#1b4b79',stroke:'#9dc4e0','stroke-width':.8},svg)});
+ [[58,112],[265,95],[108,152],[321,130]].forEach(function(p){node('circle',{cx:p[0],cy:p[1],r:2.3,fill:'#1b4b79',stroke:'#9dc4e0','stroke-width':.8},svg)});
  var step=396/rows.length;
  var drawOrder=rows.map(function(row,index){return Object.assign({_index:index},row)}).sort(function(a,b){return (a.open?2:a.closing?1:0)-(b.open?2:b.closing?1:0)});
  drawOrder.forEach(function(row){
