@@ -1,0 +1,30 @@
+/* Tool Crib V13.1 - correccion de perspectiva y desplazamiento del cajon.
+   El cajon se desplaza a la derecha y levemente hacia abajo, sin tapar el siguiente. */
+#view-locations .tc-iso-svg .tc-iso-drawer.tc-iso-open,
+#view-locations .tc-iso-svg .tc-iso-drawer.tc-selected.tc-iso-open{
+ transform:translate(24px,9px)!important;
+ filter:drop-shadow(3px 5px 5px #00172c99);
+}
+#view-locations .tc-iso-svg .tc-iso-drawer.tc-iso-opening{
+ animation:tc-v131-open .55s cubic-bezier(.2,.8,.2,1) both!important;
+}
+#view-locations .tc-iso-svg .tc-iso-drawer.tc-iso-closing{
+ animation:tc-v131-close .35s ease-in both!important;
+}
+@keyframes tc-v131-open{
+ from{transform:translate(0,0);opacity:1}
+ to{transform:translate(24px,9px);opacity:1}
+}
+@keyframes tc-v131-close{
+ from{transform:translate(24px,9px);opacity:1}
+ to{transform:translate(0,0);opacity:1}
+}
+#view-locations .tc-iso-svg .tc-iso-drawer.tc-iso-open .tc-iso-face,
+#view-locations .tc-iso-svg .tc-iso-drawer.tc-iso-opening .tc-iso-face{
+ stroke:#8fe3ff;stroke-width:2.2;
+}
+@media(prefers-reduced-motion:reduce){
+ #view-locations .tc-iso-svg .tc-iso-drawer.tc-iso-opening,
+ #view-locations .tc-iso-svg .tc-iso-drawer.tc-iso-open{animation:none!important;transform:translate(24px,9px)!important}
+ #view-locations .tc-iso-svg .tc-iso-drawer.tc-iso-closing{animation:none!important;transform:translate(0,0)!important}
+}
