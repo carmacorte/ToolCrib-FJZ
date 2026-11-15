@@ -134,6 +134,89 @@
 @media(max-width:900px){.storage-hero{grid-template-columns:minmax(0,1fr) 108px}.storage-hero figure:last-child{display:none}.storage-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.storage-layout{grid-template-columns:1fr}.storage-layout .storage-info-column{grid-column:auto}.storage-rack-layout{grid-template-columns:1fr}}
 @media(max-width:600px){.storage-hero{grid-template-columns:1fr}.storage-hero figure{display:none}.storage-summary{gap:7px}.storage-stat{padding:10px}.storage-stat strong{font-size:20px}.storage-topline{padding:13px}.storage-query{min-width:0;width:100%;max-width:none}.storage-config{padding:12px}.storage-config label{flex:1}.storage-config .btn{flex:1}.storage-slot-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.storage-layout{padding:12px;gap:10px}.storage-rack-cards{grid-template-columns:1fr}.storage-rack-layout{padding:12px}}
 </style>
+<style id="tc-v11-visual-map">
+/* V11: light application panels, dark technical illustration surfaces only. */
+#view-locations .storage-hero{background:linear-gradient(115deg,#f8fbff,#eaf3fb);color:#183b5e;border:1px solid #d9e7f3;box-shadow:0 4px 14px #18395b0a}
+#view-locations .storage-hero p{color:#52708e}#view-locations .storage-hero figcaption{color:#56738b}
+#view-locations .storage-hero img{border:1px solid #b8cee1}
+#view-locations .storage-layout{grid-template-columns:minmax(188px,.75fr) minmax(300px,1.5fr) minmax(285px,1fr);gap:12px;padding:14px;align-items:stretch;background:#fff}
+#view-locations .storage-layout>.storage-card:nth-child(1),#view-locations .storage-layout>.storage-card:nth-child(2){position:relative;isolation:isolate;background:radial-gradient(ellipse at 50% 10%,#1c446b 0%,#0d2744 48%,#07182e 100%);border:1px solid #245c88;color:#eaf5ff;box-shadow:inset 0 0 0 1px #5ac8ff18,0 7px 23px #0c2b4d22}
+#view-locations .storage-layout>.storage-card:nth-child(2){background:radial-gradient(ellipse at 90% 0%,#143e67 0%,#0a2849 52%,#07182e 100%)}
+#view-locations .storage-layout>.storage-card:nth-child(-n+2) .storage-card-title{background:#071b32aa;color:#ecf7ff;border-bottom:1px solid #24577c;text-transform:none;letter-spacing:.015em}
+#view-locations .storage-layout>.storage-card:nth-child(-n+2) .storage-card-title small{color:#8fc0e7}
+#view-locations .storage-layout>.storage-card:nth-child(-n+2) .storage-footnote{color:#a9c1d9;line-height:1.5}
+#view-locations .storage-layout>.storage-info-column{background:#fff;border:1px solid #dce6f1;color:#1c3450;box-shadow:0 5px 15px #12345a0b}
+#view-locations .storage-layout>.storage-info-column .storage-card-title{background:#f8fbff;color:#254765}
+#view-locations .storage-cab-frame{margin:21px auto 15px;width:calc(100% - 31px);max-width:275px;padding:17px 11px 11px;border:6px solid #123454;border-top:11px solid #4789c0;border-radius:10px 10px 9px 9px;position:relative;transform:perspective(700px) rotateY(-3deg);background:linear-gradient(100deg,#244b71 0%,#3979b3 8%,#143e69 17%,#0e2b4d 85%,#31658e 100%);box-shadow:inset 3px 0 7px #a6d9ff47,inset -4px 0 9px #03182b88,9px 17px 21px #0008,0 0 28px #4197dc22}
+#view-locations .storage-cab-frame:before{content:"";position:absolute;inset:-12px -7px auto;height:8px;background:linear-gradient(90deg,#214a75,#84c1ee 50%,#1d4b79);transform:skewX(-12deg);border-radius:3px}
+#view-locations .storage-cab-frame:after{content:"";display:block;position:absolute;left:10%;right:10%;bottom:-12px;height:8px;border-radius:50%;background:#040e1c;filter:blur(6px);z-index:-1}
+#view-locations .storage-drawer{min-height:39px;border:1px solid #5c91bb;background:linear-gradient(180deg,#3777b1 0%,#245c95 44%,#153d6c 100%);box-shadow:inset 0 2px 0 #9acaf450,0 3px 1px #051c37,0 5px 9px #03162a55;letter-spacing:.02em;border-radius:5px;color:#f1f8ff;position:relative}
+#view-locations .storage-drawer:hover{background:linear-gradient(180deg,#428aca,#286db0);border-color:#9fd9ff}
+#view-locations .storage-drawer.active{outline:2px solid #6ed4ff;outline-offset:0;border-color:#b5eaff;background:linear-gradient(180deg,#368edf,#135ba5);box-shadow:0 0 0 2px #114476,0 0 18px #3dbfff9c,inset 0 2px 0 #c4ecff88}
+#view-locations .storage-drawer-handle{height:6px;width:34%;background:linear-gradient(180deg,#f0f5fa,#8faec6);box-shadow:0 1px 3px #001a36;border:1px solid #6e94b7}
+#view-locations .storage-drawer em{background:#062747aa;border:1px solid #93cfff33}
+#view-locations .storage-drawer[data-tc-attention="true"] em{background:#805516;color:#ffe5a0;border-color:#f3b247}
+#view-locations .storage-slot-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:15px;align-content:start}
+#view-locations .storage-slot{min-height:112px;border:1px solid #426788;background:linear-gradient(155deg,#122c49,#0b2038);color:#e5f3ff;border-radius:9px;padding:12px 11px;box-shadow:inset 0 1px 0 #5c9bc022,0 3px 8px #03132344;transition:transform .15s,border-color .15s,box-shadow .15s;gap:9px}
+#view-locations .storage-slot:hover{transform:translateY(-2px);border-color:#69c7f7;background:linear-gradient(155deg,#153b62,#0b2644)}
+#view-locations .storage-slot .slot-no{font-size:18px;color:#eaf7ff;line-height:1.1;letter-spacing:.04em}
+#view-locations .storage-slot .slot-count{font-size:10px;color:#a0c2db}
+#view-locations .storage-slot .slot-dot{height:7px;width:7px;top:14px;right:13px;background:#7a98b2}
+#view-locations .storage-slot[data-tc-state="good"]{border-color:#1b956e;background:linear-gradient(155deg,#113c43,#0a2836)}
+#view-locations .storage-slot[data-tc-state="good"] .slot-dot{background:#30d4a0;box-shadow:0 0 7px #34edb3}
+#view-locations .storage-slot[data-tc-state="low"]{border-color:#c28e32;background:linear-gradient(155deg,#463820,#222636)}
+#view-locations .storage-slot[data-tc-state="low"] .slot-dot{background:#ffc052;box-shadow:0 0 7px #ffbb4a}
+#view-locations .storage-slot[data-tc-state="zero"]{border-color:#a64f64;background:linear-gradient(155deg,#3f2537,#251e33)}
+#view-locations .storage-slot[data-tc-state="zero"] .slot-dot{background:#ff657f;box-shadow:0 0 7px #ff5777}
+#view-locations .storage-slot.active{border:2px solid #5bd0ff;background:linear-gradient(150deg,#194e80,#09365f);box-shadow:0 0 0 1px #93e3ff,0 0 17px #2fb8ff9a,inset 0 1px 0 #a2e8ff66;opacity:1!important}
+#view-locations .storage-slot.hit:not(.active){border-color:#9bdbff;box-shadow:0 0 0 1px #77d3ff,0 0 14px #59bdff66}
+#view-locations .storage-slot.dimmed:not(.active){opacity:.28}
+#view-locations .storage-slot .tc-bin-extra{display:grid;gap:3px;width:100%;min-width:0;margin-top:auto}
+#view-locations .storage-slot .tc-bin-qty{font-weight:850;color:#c5ecff;font-size:12px;white-space:nowrap}
+#view-locations .storage-slot[data-tc-state="good"] .tc-bin-qty{color:#52e9b9}
+#view-locations .storage-slot[data-tc-state="low"] .tc-bin-qty{color:#ffce79}
+#view-locations .storage-slot[data-tc-state="zero"] .tc-bin-qty{color:#ff9eaf}
+#view-locations .storage-slot .tc-bin-sku{font-size:9px;color:#b2cce2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#view-locations.tc-lens-alerts .storage-slot[data-tc-state="good"]:not(.active),#view-locations.tc-lens-alerts .storage-slot[data-tc-state="empty"]:not(.active){opacity:.24}
+#view-locations.tc-lens-occupancy .storage-slot .tc-bin-qty{font-size:15px}
+#view-locations.tc-lens-occupancy .storage-slot .tc-bin-sku{color:#daeeff}
+#view-locations .tc-map-lens{background:#f5f9fd;border-bottom:1px solid #e0eaf3;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px}
+#view-locations .tc-lens-label{font-size:11px;color:#6c8196;font-weight:750}
+#view-locations .tc-lens-set{display:flex;gap:5px;flex-wrap:wrap}
+#view-locations .tc-lens-btn{border:1px solid #d5e1ef;background:#fff;color:#496782;padding:7px 11px;border-radius:7px;font-size:11px;font-weight:800;cursor:pointer}
+#view-locations .tc-lens-btn[aria-pressed="true"]{background:#e4f2ff;border-color:#67a9dd;color:#145b9b;box-shadow:0 0 0 1px #93c7ef}
+#view-locations .tc-lens-btn:hover{border-color:#5f9cce}
+#view-locations .tc-legend{display:flex;gap:13px;flex-wrap:wrap;align-items:center;padding:0 16px 16px;color:#c0d5e7;font-size:10px}
+#view-locations .tc-legend>span{display:inline-flex;gap:5px;align-items:center}
+#view-locations .tc-color{width:9px;height:9px;border-radius:3px;display:inline-block;background:#6686a5}
+#view-locations .tc-color.good{background:#23c691}.tc-color.low{background:#efb44a}.tc-color.zero{background:#e66a80}.tc-color.selected{background:#55cbff}
+#view-locations .tc-selected-overview{display:flex;align-items:center;gap:10px;background:#f0f7ff;border:1px solid #d8e9fa;border-radius:10px;padding:10px;margin:9px 0 13px}
+#view-locations .tc-selected-overview strong{font-size:16px;color:#155b93;display:block}
+#view-locations .tc-selected-overview small{font-size:10px;color:#67859e;display:block}
+#view-locations .tc-selected-overview .tc-selected-summary{flex:1;min-width:0}
+#view-locations .tc-selected-overview .tc-selected-photo{width:62px;height:54px;border-radius:7px;background:linear-gradient(140deg,#e4eef7,#c8dcf0);border:1px solid #b9d1e6;display:flex;align-items:center;justify-content:center;color:#4b789f;font-size:10px;flex:0 0 auto;overflow:hidden;text-align:center}
+#view-locations .tc-selected-overview .tc-selected-photo img{width:100%;height:100%;object-fit:contain;background:#fff}
+#view-locations .tc-selected-overview .tc-selected-note{font-size:10px;color:#708aa0;margin-top:3px}
+#view-locations .tc-map-history{border-top:1px solid #dfeaf3;background:#fff;padding:14px 20px 18px}
+#view-locations .tc-history-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:11px}
+#view-locations .tc-history-head strong{font-size:14px;color:#1f456b}
+#view-locations .tc-history-head small{display:block;color:#8094a7;margin-top:4px}
+#view-locations .tc-history-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+#view-locations .tc-history-actions button{padding:6px 10px;font-size:10px;color:#4e6f8d;border:1px solid #d5e3f0;border-radius:7px;background:#fff;cursor:pointer}
+#view-locations .tc-history-actions button[aria-pressed="true"]{background:#eaf4ff;color:#145a95;border-color:#94c1e7}
+#view-locations .tc-history-scroll{overflow-x:auto}
+#view-locations .tc-history-table{width:100%;border-collapse:collapse;min-width:620px;font-size:11px}
+#view-locations .tc-history-table th{text-align:left;padding:10px 9px;background:#f3f7fb;color:#5b758d;font-size:10px;letter-spacing:.03em}
+#view-locations .tc-history-table td{padding:10px 9px;border-bottom:1px solid #edf2f7;color:#31536e}
+#view-locations .tc-history-table tr:last-child td{border-bottom:0}
+#view-locations .tc-history-table .tc-move-entry{color:#078558;font-weight:800}
+#view-locations .tc-history-table .tc-move-exit{color:#c44955;font-weight:800}
+#view-locations .tc-history-empty{padding:20px;text-align:center;border:1px dashed #c7d9e8;background:#f8fbfe;border-radius:8px;color:#6c8297;font-size:12px}
+@media(max-width:1380px){#view-locations .storage-layout{grid-template-columns:minmax(175px,.75fr) minmax(260px,1.4fr)}#view-locations .storage-layout>.storage-info-column{grid-column:1/-1}}
+@media(max-width:900px){#view-locations .storage-layout{grid-template-columns:1fr 1fr}#view-locations .storage-layout>.storage-info-column{grid-column:1/-1}}
+@media(max-width:650px){#view-locations .storage-layout{grid-template-columns:1fr}#view-locations .storage-layout>.storage-info-column{grid-column:auto}#view-locations .tc-map-lens{padding:10px 12px}#view-locations .storage-slot-grid{grid-template-columns:repeat(3,minmax(0,1fr))}#view-locations .tc-selected-overview{flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){#view-locations .storage-slot{transition:none}#view-locations .storage-slot:hover{transform:none}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -973,5 +1056,152 @@ load();populateLookups();render();
 <dialog id="tc-photo-dialog" class="tc-photo-dialog"><h2>Fotografía del material</h2><div id="tc-photo-sku"></div><img id="tc-photo-preview" class="tc-photo-preview" alt="Fotografía de la refacción" hidden><p id="tc-photo-empty">Sin fotografía asignada</p><div class="tc-photo-actions"><label class="btn primary">Cargar fotografía<input id="tc-photo-upload" type="file" accept="image/png,image/jpeg,image/webp" hidden></label><label><input type="checkbox" id="tc-photo-verified"> Fotografía verificada</label><button type="button" class="btn" id="tc-photo-remove">Eliminar foto</button><button type="button" class="btn" id="tc-photo-close">Cerrar</button></div><p>Fotografías guardadas localmente en IndexedDB. No modifican stock ni movimientos.</p><button class="btn" id="tc-photo-export" type="button">Exportar catálogo visual JSON</button><label class="btn">Importar catálogo visual JSON<input type="file" id="tc-photo-import" accept="application/json,.json" hidden></label></dialog>
 <script src="js/identity-audit-v9.js"></script>
 <script src="js/visual-catalog-v8.js"></script>
+<script id="tc-v11-visual-script">
+(function(){
+'use strict';
+var mapRoot=document.getElementById('view-locations');
+var cabView=document.getElementById('storage-cabinet-view');
+var slots=document.getElementById('storage-slot-grid');
+if(!mapRoot||!cabView||!slots||typeof storageCabItems!=='function')return;
+var lens='stock',historyScope='location';
+var lensBar=document.createElement('div');
+lensBar.className='tc-map-lens';
+lensBar.innerHTML='<span class="tc-lens-label">VISUALIZACIÓN DE GAVETAS</span><div class="tc-lens-set"><button type="button" class="tc-lens-btn" data-tc-lens="stock" aria-pressed="true">Existencias</button><button type="button" class="tc-lens-btn" data-tc-lens="occupancy" aria-pressed="false">Ocupación</button><button type="button" class="tc-lens-btn" data-tc-lens="alerts" aria-pressed="false">Alertas</button></div>';
+cabView.querySelector('.storage-config').after(lensBar);
+var legend=document.createElement('div');
+legend.className='tc-legend';
+legend.innerHTML='<span><i class="tc-color good"></i>En rango</span><span><i class="tc-color low"></i>Bajo mínimo</span><span><i class="tc-color zero"></i>Agotado</span><span><i class="tc-color"></i>Sin SKU</span><span><i class="tc-color selected"></i>Seleccionado</span>';
+slots.after(legend);
+var history=document.createElement('section');
+history.id='tc-map-history';history.className='tc-map-history';
+var help=mapRoot.querySelector('.storage-shell .storage-help');if(help)help.before(history);
+function stateOf(items){
+ if(!items.length)return 'empty';
+ if(items.some(function(x){return stockStatus(x)==='zero'}))return 'zero';
+ if(items.some(function(x){return stockStatus(x)==='low'}))return 'low';
+ return 'good';
+}
+function itemsAtSelection(){
+ if(storageUI.tab==='rack')return storageUI.rack?storageAllAtPlace(storageUI.rack):[];
+ return storageCabItems(storageUI.cabinet,storageUI.drawer,storageUI.slot);
+}
+function updateLens(){
+ mapRoot.classList.toggle('tc-lens-alerts',lens==='alerts');
+ mapRoot.classList.toggle('tc-lens-occupancy',lens==='occupancy');
+ lensBar.querySelectorAll('[data-tc-lens]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.tcLens===lens))});
+}
+lensBar.addEventListener('click',function(e){
+ var b=e.target.closest('[data-tc-lens]');if(!b)return;
+ if(!['stock','occupancy','alerts'].includes(b.dataset.tcLens))return;
+ lens=b.dataset.tcLens;updateLens();
+});
+function decorateBins(){
+ slots.querySelectorAll('.storage-slot[data-storage-action="slot"]').forEach(function(btn){
+  var n=Number(btn.dataset.value),items=storageCabItems(storageUI.cabinet,storageUI.drawer,n),condition=stateOf(items),units=new Set(items.map(function(x){return String(x.unit||'').trim()})),qty=items.reduce(function(sum,x){return sum+(Number(x.stock)||0)},0);
+  btn.dataset.tcState=condition;
+  var extra=btn.querySelector('.tc-bin-extra');
+  if(!extra){
+   extra=document.createElement('span');extra.className='tc-bin-extra';
+   var stock=document.createElement('span'),sku=document.createElement('span');
+   stock.className='tc-bin-qty';sku.className='tc-bin-sku';extra.append(stock,sku);btn.append(extra);
+  }
+  var stockText=items.length?(units.size===1?String(qty)+' '+(items[0].unit||'pzas'):String(items.length)+' SKU'):'Sin material';
+  extra.querySelector('.tc-bin-qty').textContent=stockText;
+  extra.querySelector('.tc-bin-sku').textContent=items.length===1?items[0].sku:items.length>1?String(items.length)+' SKU en ubicación':'Sin SKU asignado';
+  btn.title='Compartimento '+String(n).padStart(2,'0')+' · '+stockText+' · '+(condition==='zero'?'Agotado':condition==='low'?'Bajo mínimo':condition==='good'?'En rango':'Sin SKU');
+  btn.setAttribute('aria-label',btn.title);
+ });
+}
+function decorateDrawers(){
+ var nodes=document.getElementById('storage-cab-drawers');if(!nodes)return;
+ nodes.querySelectorAll('.storage-drawer').forEach(function(btn){
+  btn.dataset.tcAttention=String(!!btn.querySelector('.warn'));
+ });
+}
+function fetchVisualPhoto(sku,target){
+ if(!sku||!target||!window.indexedDB)return;
+ try{
+  var req=indexedDB.open('ToolCribVisualCatalog',1);
+  req.onsuccess=function(){
+   var idb=req.result;
+   if(!idb.objectStoreNames.contains('photos')){idb.close();return}
+   var tx=idb.transaction('photos','readonly');var photo=tx.objectStore('photos').get(String(sku).trim().toUpperCase());
+   photo.onsuccess=function(){
+    var rec=photo.result;
+    if(!target.isConnected||!rec||!/^data:image\/(jpeg|png|webp);base64,/.test(rec.image||''))return;
+    target.replaceChildren();var img=document.createElement('img');img.alt='Fotografía del SKU '+sku;img.src=rec.image;target.append(img);
+   };
+   tx.oncomplete=function(){idb.close()};tx.onerror=function(){idb.close()};
+  };
+  req.onerror=function(){};
+ }catch(_){}
+}
+function decorateDetail(){
+ var target=document.getElementById(storageUI.tab==='rack'?'storage-rack-detail':'storage-slot-detail');
+ if(!target||target.querySelector('.tc-selected-overview'))return;
+ var items=itemsAtSelection(),overview=document.createElement('div');overview.className='tc-selected-overview';
+ var info=document.createElement('div');info.className='tc-selected-summary';
+ var name=document.createElement('strong');name.textContent=String(items.length)+' SKU';
+ var summary=document.createElement('small');var alerts=items.filter(function(x){return ['zero','low'].includes(stockStatus(x))}).length;
+ summary.textContent=alerts?String(alerts)+' SKU con alerta de existencia':'Sin alertas registradas';
+ var note=document.createElement('div');note.className='tc-selected-note';
+ note.textContent=items.length===1?'Stock: '+items[0].stock+' '+(items[0].unit||'')+' · Mín. '+items[0].min+' / Máx. '+items[0].max:items.length?'Consulta los materiales de esta ubicación':'Ubicación aún sin materiales registrados';
+ info.append(name,summary,note);overview.append(info);
+ if(items.length===1){
+  var photo=document.createElement('div');photo.className='tc-selected-photo';photo.textContent='Sin foto';overview.prepend(photo);fetchVisualPhoto(items[0].sku,photo);
+ }
+ var sub=target.querySelector('small');if(sub)sub.after(overview);else target.prepend(overview);
+}
+function addCell(tr,value,klass){
+ var td=document.createElement('td');td.textContent=value===undefined||value===null||value===''?'—':String(value);if(klass)td.className=klass;tr.append(td);
+}
+function renderHistory(){
+ if(!history)return;
+ var items=itemsAtSelection(),skuSet=new Set(items.map(function(x){return String(x.sku||'').toUpperCase()}));
+ var entries=(db.moves||[]).filter(function(m){return historyScope==='all'||skuSet.has(String(m.sku||'').toUpperCase())}).slice().sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''))}).slice(0,6);
+ history.replaceChildren();
+ var top=document.createElement('div');top.className='tc-history-head';
+ var title=document.createElement('div'),heading=document.createElement('strong'),hint=document.createElement('small');
+ heading.textContent='MOVIMIENTOS RECIENTES';hint.textContent='Historial proveniente de la sesión y del archivo importado';
+ title.append(heading,hint);
+ var actions=document.createElement('div');actions.className='tc-history-actions';
+ [['location','Esta ubicación'],['all','Todos los movimientos']].forEach(function(part){
+  var b=document.createElement('button');b.type='button';b.textContent=part[1];b.dataset.tcScope=part[0];b.setAttribute('aria-pressed',String(historyScope===part[0]));actions.append(b);
+ });
+ var link=document.createElement('button');link.type='button';link.textContent='Ver historial completo';link.dataset.tcHistory='open';actions.append(link);
+ top.append(title,actions);history.append(top);
+ if(!entries.length){
+  var noRows=document.createElement('div');noRows.className='tc-history-empty';
+  noRows.textContent=historyScope==='location'?'Sin movimientos asociados a los SKU de esta ubicación.':'No hay movimientos en la sesión cargada.';
+  history.append(noRows);return;
+ }
+ var scroller=document.createElement('div');scroller.className='tc-history-scroll';
+ var table=document.createElement('table');table.className='tc-history-table';
+ var thead=document.createElement('thead'),headerRow=document.createElement('tr');
+ ['FECHA','MATERIAL','OPERACIÓN','CAMBIO','RESPONSABLE','TERMINAL','REFERENCIA'].forEach(function(label){var th=document.createElement('th');th.textContent=label;headerRow.append(th)});
+ thead.append(headerRow);table.append(thead);
+ var tbody=document.createElement('tbody');
+ var labels={entrada:'Entrada',salida:'Salida',ajuste:'Ajuste',alta:'Alta inicial',parametros:'Parámetros'};
+ entries.forEach(function(m){
+  var tr=document.createElement('tr'),n=Number(m.change)||0,klass=m.type==='entrada'?'tc-move-entry':m.type==='salida'?'tc-move-exit':'';
+  var ts=String(m.date||'');var d=new Date(ts);if(!Number.isNaN(d.getTime()))ts=d.toLocaleString('es-MX',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+  addCell(tr,ts);addCell(tr,m.sku);addCell(tr,labels[m.type]||m.type);addCell(tr,(n>0?'+':'')+n,klass);addCell(tr,m.operator);addCell(tr,m.terminal);addCell(tr,m.ref);tbody.append(tr);
+ });
+ table.append(tbody);scroller.append(table);history.append(scroller);
+}
+history.addEventListener('click',function(e){
+ var b=e.target.closest('button');if(!b)return;
+ if(b.dataset.tcHistory==='open'){navTo('moves');return}
+ if(b.dataset.tcScope==='all'||b.dataset.tcScope==='location'){historyScope=b.dataset.tcScope;renderHistory()}
+});
+function refresh(){decorateBins();decorateDrawers();decorateDetail();renderHistory()}
+[
+ document.getElementById('storage-slot-grid'),document.getElementById('storage-cab-drawers'),
+ document.getElementById('storage-slot-detail'),document.getElementById('storage-rack-detail'),
+ document.getElementById('storage-rack-cards')
+].filter(Boolean).forEach(function(el){new MutationObserver(refresh).observe(el,{childList:true})});
+updateLens();refresh();
+})();
+</script>
 </body>
 </html>
