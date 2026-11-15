@@ -1350,12 +1350,12 @@ function paint(rows){
   var group=node('g',{class:'tc-iso-drawer'+(row.selected?' tc-selected':'')+(row.hit?' tc-search-hit':'')+(row.open?' tc-iso-open':'')+(row.opening?' tc-iso-opening':'')+(row.closing?' tc-iso-closing':''),'data-storage-action':'drawer','data-value':row.letter,tabindex:0,role:'button','aria-expanded':String(!!row.open),'aria-label':'Cajón '+row.letter+': '+row.count+(row.open?' abierto, clic para cerrar':', clic para abrir')+(row.alert?' con alerta':'')},svg);
   node('title',{},group,'Gaveta '+row.letter+' · '+row.count+(row.alert?' · Alerta':''));
   if(row.open||row.closing){
-   node('polygon',{class:'tc-iso-tray-side',points:'107,'+y+' 93,'+(y-37)+' 93,'+(y-23)+' 107,'+(y+12)},group);
-   node('polygon',{class:'tc-iso-tray-floor',points:'107,'+(y-1)+' 316,'+(y-15)+' 306,'+(y-51)+' 93,'+(y-37)},group);
-   node('path',{class:'tc-iso-tray-rim',d:'M 93 '+(y-37)+' L 306 '+(y-51)+' L 316 '+(y-15)},group);
+   node('polygon',{class:'tc-iso-tray-side',points:'107,'+y+' 93,'+(y-12)+' 93,'+(y+2)+' 107,'+(y+12)},group);
+   node('polygon',{class:'tc-iso-tray-floor',points:'107,'+(y-1)+' 316,'+(y-15)+' 306,'+(y-26)+' 93,'+(y-12)},group);
+   node('path',{class:'tc-iso-tray-rim',d:'M 93 '+(y-12)+' L 306 '+(y-26)+' L 316 '+(y-15)},group);
    var limit=Math.min(12,storageLayout().bins);
    for(var k=0;k<limit;k++){
-    var col=k%4,r=Math.floor(k/4),px=111+col*49+r*1.1,py=y-41+r*10.5-col*.85;
+    var col=k%4,r=Math.floor(k/4),px=111+col*49+r*1.1,py=y-18+r*3.1-col*.85;
     node('rect',{class:'tc-iso-tray-bin'+(k+1===storageUI.slot?' tc-target':''),x:px,y:py,width:37,height:7,rx:1.4},group);
    }
   }
