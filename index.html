@@ -236,6 +236,21 @@
 @media(max-width:1350px){#view-locations .storage-layout{grid-template-columns:minmax(215px,.9fr) minmax(280px,1.45fr)}#view-locations .storage-layout>.storage-info-column{grid-column:1/-1}}
 @media(max-width:760px){#view-locations .storage-layout{grid-template-columns:1fr}#view-locations .storage-layout>.storage-info-column{grid-column:auto}#view-locations .tc-iso-svg{max-width:365px}}
 </style>
+
+<style id="tc-v12-iso-motion">
+/* Active isometric drawer is pulled forward: SVG cabinet stays within the existing dark illustration card. */
+#view-locations .tc-iso-svg .tc-iso-drawer.tc-selected{transform:translate(0,0);transition:transform .72s cubic-bezier(.15,.83,.20,1),filter .72s;will-change:transform}
+#view-locations .tc-iso-svg .tc-iso-drawer.tc-selected.tc-iso-pulled{transform:translate(19px,24px);filter:drop-shadow(4px 8px 7px #000a)}
+#view-locations .tc-iso-cavity{fill:#031326;stroke:#76bdea;stroke-opacity:.65;stroke-width:2}
+#view-locations .tc-iso-tray-side{fill:#0b3155;stroke:#3f88bc;stroke-width:1.8;opacity:0;transition:opacity .25s ease .1s}
+#view-locations .tc-iso-tray-floor{fill:#174366;stroke:#8bc9f2;stroke-width:1.5;opacity:0;transition:opacity .27s ease .13s}
+#view-locations .tc-iso-tray-rim{fill:none;stroke:#a1dafa;stroke-width:2;opacity:0;transition:opacity .3s ease .15s}
+#view-locations .tc-iso-tray-bin{fill:#0d2c47;stroke:#3c8fb7;stroke-width:1;opacity:0;transition:opacity .25s ease .2s}
+#view-locations .tc-iso-tray-bin.tc-target{fill:#12608a;stroke:#9fe8ff;stroke-width:2;filter:drop-shadow(0 0 3px #53ccff)}
+#view-locations .tc-iso-drawer.tc-iso-pulled .tc-iso-tray-side,#view-locations .tc-iso-drawer.tc-iso-pulled .tc-iso-tray-floor,#view-locations .tc-iso-drawer.tc-iso-pulled .tc-iso-tray-rim,#view-locations .tc-iso-drawer.tc-iso-pulled .tc-iso-tray-bin{opacity:1}
+#view-locations .storage-layout .inline-actions{flex-wrap:wrap}
+@media(prefers-reduced-motion:reduce){#view-locations .tc-iso-svg .tc-iso-drawer.tc-selected{transition:none!important;transform:translate(10px,12px)!important}#view-locations .tc-iso-tray-side,#view-locations .tc-iso-tray-floor,#view-locations .tc-iso-tray-rim,#view-locations .tc-iso-tray-bin{transition:none!important}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -250,7 +265,7 @@
   <button class="nav-btn" data-nav="equipment"><span class="sym">⚙</span> Catálogo de equipos</button>
   <button class="nav-btn" data-nav="settings"><span class="sym">⚒</span> Datos y respaldos</button>
  </nav></div>
- <div class="sidebar-foot"><strong><span class="status-dot"></span>Archivo independiente</strong><small>Sin servidor ni internet. Información en el navegador de esta PC.</small><small style="margin-top:8px" id="sidebar-version">Versión 8.0 · Mapa interactivo + Excel + Sorts</small></div>
+ <div class="sidebar-foot"><strong><span class="status-dot"></span>Archivo independiente</strong><small>Sin servidor ni internet. Información en el navegador de esta PC.</small><small style="margin-top:8px" id="sidebar-version">Versión 12.0 · Gavetas animadas + Excel</small></div>
 </aside>
 <div class="main">
  <header class="topbar"><div class="crumb">FJZ <span style="padding:0 8px;color:#bed0df">/</span> <strong id="crumb-name">Resumen general</strong></div><div class="top-actions"><span class="offline">◉ Datos locales · Sin servidor</span><span class="avatar">TC</span></div></header>
@@ -589,7 +604,7 @@ function renderSessionUI(){
  const banner=$('startup-clean-banner');
  if(banner){banner.hidden=!clean||!!(db.items.length||db.moves.length);}
  const quick=$('session-recover-quick');if(quick)quick.disabled=!saved;
- const sidebar=$('sidebar-version');if(sidebar)sidebar.textContent='Versión 8.0 · Mapa interactivo + Excel + Sorts';
+ const sidebar=$('sidebar-version');if(sidebar)sidebar.textContent='Versión 12.0 · Gavetas animadas + Excel';
 }
 
 function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(db));return true;}catch(e){alert('No fue posible guardar. El almacenamiento del navegador puede estar lleno o bloqueado. Descarga un respaldo JSON.');return false;}}
@@ -720,7 +735,7 @@ function changeInventorySort(key){
  else inventorySort={key,direction:'asc'};
  renderInventory();
 }
-function renderInventory(){updateFilterOptions();refreshInventorySortHeads();let q=filters.query.toLowerCase().trim();let matches=db.items.filter(x=>(filters.status==='all'?true:stockStatus(x)===filters.status)&&(filters.bu==='all'||x.bu===filters.bu)&&(filters.category==='all'||x.category===filters.category)&&(!q||[x.sku,x.name,x.bu,x.category,x.location,x.supplier,x.department,x.notes].some(z=>String(z||'').toLowerCase().includes(q))));matches.sort(compareInventory);$('inventory-body').innerHTML=matches.length?matches.slice(0,250).map(x=>`<tr><td><div class="sku">${esc(x.sku)}</div>${x.demo?'<span class="badge-demo">DEMO</span>':''}</td><td><div class="item-name" title="${esc(x.name)}">${esc(x.name)}</div><div class="muted">${esc(x.category||'Sin categoría')} · ${esc(x.unit)}</div></td><td><b>${esc(x.bu||'Sin BU')}</b><div class="muted">${esc(x.location||x.building||'Sin ubicación')}</div></td><td class="num">${niceNum(x.stock)}</td><td>${niceNum(x.min)} / ${niceNum(x.max)}</td><td>${badge(x)}</td><td><div class="inline-actions"><button class="btn small" data-action="edit-item" data-id="${esc(x.id)}">Editar</button><button class="btn small" data-action="move-item" data-id="${esc(x.id)}" ${x.archived?'disabled':''}>⇄</button><button class="btn small ghost" data-action="archive-item" data-id="${esc(x.id)}">${x.archived?'Restaurar':'Archivar'}</button></div></td></tr>`).join(''):emptyRow(7,'No hay materiales para mostrar',db.items.length?'Modifica los filtros para encontrar registros.':'Crea tu primer SKU o importa una plantilla CSV.');$('inventory-count').textContent=`${niceNum(matches.length)} materiales${matches.length>250?' · primeros 250 visibles':''}`;}
+function renderInventory(){updateFilterOptions();refreshInventorySortHeads();let q=filters.query.toLowerCase().trim();let matches=db.items.filter(x=>(filters.status==='all'?true:stockStatus(x)===filters.status)&&(filters.bu==='all'||x.bu===filters.bu)&&(filters.category==='all'||x.category===filters.category)&&(!q||[x.sku,x.name,x.bu,x.category,x.location,x.supplier,x.department,x.notes].some(z=>String(z||'').toLowerCase().includes(q))));matches.sort(compareInventory);$('inventory-body').innerHTML=matches.length?matches.slice(0,250).map(x=>`<tr><td><div class="sku">${esc(x.sku)}</div>${x.demo?'<span class="badge-demo">DEMO</span>':''}</td><td><div class="item-name" title="${esc(x.name)}">${esc(x.name)}</div><div class="muted">${esc(x.category||'Sin categoría')} · ${esc(x.unit)}</div></td><td><b>${esc(x.bu||'Sin BU')}</b><div class="muted">${esc(x.location||x.building||'Sin ubicación')}</div></td><td class="num">${niceNum(x.stock)}</td><td>${niceNum(x.min)} / ${niceNum(x.max)}</td><td>${badge(x)}</td><td><div class="inline-actions"><button class="btn small" data-action="edit-item" data-id="${esc(x.id)}">Editar</button><button class="btn small ghost" data-storage-action="find" data-id="${esc(x.id)}" title="Abrir la ubicación digital del SKU" ${!x.location||x.archived?'disabled':''}>⌖ Ubicar</button><button class="btn small" data-action="move-item" data-id="${esc(x.id)}" ${x.archived?'disabled':''}>⇄</button><button class="btn small ghost" data-action="archive-item" data-id="${esc(x.id)}">${x.archived?'Restaurar':'Archivar'}</button></div></td></tr>`).join(''):emptyRow(7,'No hay materiales para mostrar',db.items.length?'Modifica los filtros para encontrar registros.':'Crea tu primer SKU o importa una plantilla CSV.');$('inventory-count').textContent=`${niceNum(matches.length)} materiales${matches.length>250?' · primeros 250 visibles':''}`;}
 function renderMoves(){let q=moveFilter.query.toLowerCase().trim();let rows=db.moves.filter(m=>(moveFilter.type==='all'||m.type===moveFilter.type)&&(!q||[m.sku,m.name,m.operator,m.ref,m.equipment,m.reason,m.terminal,m.excelAuthor,m.excelLastModifiedBy].some(x=>String(x||'').toLowerCase().includes(q)))).sort((a,b)=>b.date.localeCompare(a.date));rows=sortTableRows('moves',rows);let labels={alta:'Alta inicial',entrada:'Entrada',salida:'Salida',ajuste:'Ajuste',parametros:'Min/Max'};$('moves-body').innerHTML=rows.length?rows.slice(0,250).map(m=>`<tr><td>${niceDate(m.date)}<div class="muted code">${esc(m.id.slice(-8))}</div></td><td><div class="sku">${esc(m.sku)}</div><div class="muted item-name">${esc(m.name)}</div></td><td>${esc(labels[m.type]||m.type)}<div class="muted" title="${esc(m.reason||'')}">${esc((m.reason||'').slice(0,55))}</div></td><td class="${m.change<0?'qty-neg':'qty-pos'}">${m.change>0?'+':''}${niceNum(m.change)}</td><td class="num">${niceNum(m.before)} → ${niceNum(m.after)}</td><td>${esc(m.operator||'—')}<div class="muted">${esc(m.terminal||'')}</div></td><td>${esc(m.ref||'—')}<div class="muted" title="${esc(m.equipment||'')}">${esc((m.equipment||'').slice(0,30))}</div></td></tr>`).join(''):emptyRow(7,'No se encontraron movimientos','Registra una entrada, salida o ajuste para iniciar el historial.');$('moves-count').textContent=`${niceNum(rows.length)} movimientos${rows.length>250?' · primeros 250 visibles':''}`;}
 function renderReorder(){let arr=sortTableRows('reorder',reorderItems()),n=arr.reduce((acc,x)=>acc+Math.max(0,x.max-x.stock),0),cost=arr.reduce((acc,x)=>acc+Math.max(0,x.max-x.stock)*x.cost,0);$('r-count').textContent=niceNum(arr.length);$('r-qty').textContent=niceNum(n);$('r-cost').textContent=money(cost);$('r-zero').textContent=niceNum(arr.filter(x=>x.stock<=0).length);$('reorder-body').innerHTML=arr.length?arr.map(x=>`<tr><td><div class="sku">${esc(x.sku)}</div><div class="item-name">${esc(x.name)}</div><div class="muted">${esc(x.bu||'—')} · ${esc(x.location||'Sin ubicación')}</div></td><td class="num">${niceNum(x.stock)}</td><td>${niceNum(x.min)}</td><td>${niceNum(x.max)}</td><td><span class="num kpi-muted">${niceNum(Math.max(0,x.max-x.stock))}</span> <span class="muted">${esc(x.unit)}</span></td><td>${money((x.max-x.stock)*x.cost)}</td><td>${esc(x.supplier||'Pendiente')}</td><td>${badge(x)}</td></tr>`).join(''):emptyRow(8,'No hay solicitudes de reabastecimiento',db.items.length?'Todos los materiales están por encima de su mínimo.':'El reporte se generará cuando existan materiales con parámetros de inventario.');$('reorder-count').textContent=`${niceNum(arr.length)} partidas · ${niceNum(n)} unidades sugeridas`;}
 function renderEquipment(){let q=equipmentFilter.query.toLowerCase().trim();let arr=EQUIPMENT.filter(x=>(equipmentFilter.bu==='all'||x[3]===equipmentFilter.bu)&&(!q||x.some(s=>String(s||'').toLowerCase().includes(q))));arr=sortTableRows('equipment',arr);$('asset-count').textContent=niceNum(EQUIPMENT.length);$('equipment-body').innerHTML=arr.slice(0,100).map(x=>`<tr><td><div class="sku">${esc(x[0])}</div><div class="muted">${esc(x[1])}</div></td><td><div class="item-name" title="${esc(x[2])}">${esc(x[2])}</div></td><td>${esc(x[3])}</td><td>${esc(x[4])}</td><td>${esc(x[5])}</td><td>${esc(x[6])}</td><td>${esc(x[7])}</td></tr>`).join('')||emptyRow(7,'Sin coincidencias','Prueba con otra identificación, línea o BU.');$('equip-count').textContent=`${niceNum(arr.length)} equipos${arr.length>100?' · primeros 100 visibles':''}`;}
@@ -1058,11 +1073,29 @@ document.addEventListener('click',e=>{
  if(action==='add-cab')storageAddCab();
  if(action==='add-rack')storageAddRack();
  if(action==='assign')storageAssign();
- if(action==='find')storageFindItem(b.dataset.id);
+ if(action==='find'){navTo('locations');storageFindItem(b.dataset.id);}
  if(action==='move')openMove(b.dataset.id,b.dataset.type||'salida');
  if(action==='edit')openItem(b.dataset.id);
 });
-$('storage-search').addEventListener('input',e=>{storageUI.search=e.target.value;renderStorageMap();});
+$('storage-search').addEventListener('input',e=>{
+ storageUI.search=e.target.value;
+ const query=storageKey(e.target.value),all=activeItems();
+ const exact=query?all.find(x=>storageKey(x.sku)===query):null;
+ const potential=!exact&&query.length>=5?all.filter(x=>storageKey(x.sku).startsWith(query)):[];
+ const found=exact||(potential.length===1?potential[0]:null);
+ if(found){
+  const pos=storageParseCabinet(found.location);
+  if(pos&&pos.drawer&&pos.slot){
+   storageUI.tab='cabinet';storageUI.cabinet=pos.cabinet;storageUI.drawer=pos.drawer;storageUI.slot=pos.slot;
+  }else if(found.location){storageUI.tab='rack';storageUI.rack=found.location;}
+ }
+ renderStorageMap();
+});
+$('storage-search').addEventListener('keydown',e=>{
+ if(e.key!=='Enter')return;
+ const results=storageSearchMatches();
+ if(results.length===1){e.preventDefault();storageFindItem(results[0].id);}
+});
 $('storage-cab-select').addEventListener('change',e=>{storageUI.cabinet=e.target.value;storageUI.drawer='A';storageUI.slot=1;renderStorageMap();});
 $('storage-drawer-count').addEventListener('change',storageSaveConfig);
 $('storage-bin-count').addEventListener('change',storageSaveConfig);
@@ -1268,10 +1301,25 @@ function paint(rows){
  node('path',{d:'M 103 150 L 103 566 M 328 128 L 328 546',fill:'none',stroke:'#d3eeff','stroke-opacity':'.26','stroke-width':2},svg);
  [[58,112],[265,83],[108,152],[321,130]].forEach(function(p){node('circle',{cx:p[0],cy:p[1],r:2.3,fill:'#1b4b79',stroke:'#9dc4e0','stroke-width':.8},svg)});
  var step=396/rows.length;
- rows.forEach(function(row,i){
-  var y=159+i*step,h=Math.max(18,step-5),cy=y+h*.50;
+ var drawOrder=rows.map(function(row,index){return Object.assign({_index:index},row)}).sort(function(a,b){return Number(a.selected)-Number(b.selected)});
+ drawOrder.forEach(function(row){
+  var i=row._index,y=159+i*step,h=Math.max(18,step-5),cy=y+h*.50;
+  if(row.selected){
+   node('polygon',{class:'tc-iso-cavity',points:'110,'+y+' 318,'+(y-14)+' 318,'+(y-14+h)+' 110,'+(y+h)},svg);
+   node('path',{d:'M 112 '+(y+1)+' L 316 '+(y-13),stroke:'#4a8fb5','stroke-width':2,opacity:.7},svg);
+  }
   var group=node('g',{class:'tc-iso-drawer'+(row.selected?' tc-selected':'')+(row.hit?' tc-search-hit':''),'data-storage-action':'drawer','data-value':row.letter,tabindex:0,role:'button','aria-label':'Cajón '+row.letter+': '+row.count+(row.alert?' con alerta':'')},svg);
   node('title',{},group,'Gaveta '+row.letter+' · '+row.count+(row.alert?' · Alerta':''));
+  if(row.selected){
+   node('polygon',{class:'tc-iso-tray-side',points:'107,'+y+' 93,'+(y-37)+' 93,'+(y-23)+' 107,'+(y+12)},group);
+   node('polygon',{class:'tc-iso-tray-floor',points:'107,'+(y-1)+' 316,'+(y-15)+' 306,'+(y-51)+' 93,'+(y-37)},group);
+   node('path',{class:'tc-iso-tray-rim',d:'M 93 '+(y-37)+' L 306 '+(y-51)+' L 316 '+(y-15)},group);
+   var limit=Math.min(12,storageLayout().bins);
+   for(var k=0;k<limit;k++){
+    var col=k%4,r=Math.floor(k/4),px=111+col*49+r*1.1,py=y-41+r*10.5-col*.85;
+    node('rect',{class:'tc-iso-tray-bin'+(k+1===storageUI.slot?' tc-target':''),x:px,y:py,width:37,height:7,rx:1.4},group);
+   }
+  }
   node('polygon',{class:'tc-iso-face',points:'110,'+y+' 318,'+(y-14)+' 318,'+(y-14+h)+' 110,'+(y+h)},group);
   node('path',{d:'M 114 '+(y+3)+' L 312 '+(y-10),stroke:'#bde2ff','stroke-opacity':'.17','stroke-width':2},group);
   node('text',{class:'tc-iso-letter',x:122,y:y+h*.69},group,row.letter);
@@ -1289,7 +1337,14 @@ function refresh(){
  var rows=buttons.map(function(b){
   return {letter:b.dataset.value,count:b.querySelector('em')?.textContent||'0 SKU',selected:b.classList.contains('active'),alert:!!b.querySelector('em.warn'),hit:!!b.querySelector('b')?.textContent.includes('★')};
  });
- host.replaceChildren(paint(rows));
+ var svg=paint(rows);
+ host.replaceChildren(svg);
+ var opening=svg.querySelector('.tc-iso-drawer.tc-selected');
+ if(opening){
+  requestAnimationFrame(function(){
+   if(opening.isConnected)opening.classList.add('tc-iso-pulled');
+  });
+ }
 }
 host.addEventListener('keydown',function(e){
  var target=e.target.closest('[data-storage-action="drawer"]');
