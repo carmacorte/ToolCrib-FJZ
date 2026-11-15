@@ -28,8 +28,13 @@ jobs:
         run: |
           mkdir -p _site/js
           cp index.html _site/index.html
-          cp js/identity-audit-v9.js _site/js/identity-audit-v9.js
-          cp js/visual-catalog-v8.js _site/js/visual-catalog-v8.js
+          # Publish the complete local UI modules, including the CSS 3D cabinet.
+          # Keeping the directories together prevents broken links after adding modules.
+          cp -R js/. _site/js/
+          if [ -d css ]; then
+            mkdir -p _site/css
+            cp -R css/. _site/css/
+          fi
           if [ -d assets/materials ]; then
             mkdir -p _site/assets
             cp -R assets/materials _site/assets/materials
