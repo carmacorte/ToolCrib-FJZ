@@ -217,6 +217,28 @@
 @media(max-width:650px){#view-locations .storage-layout{grid-template-columns:1fr}#view-locations .storage-layout>.storage-info-column{grid-column:auto}#view-locations .tc-map-lens{padding:10px 12px}#view-locations .storage-slot-grid{grid-template-columns:repeat(3,minmax(0,1fr))}#view-locations .tc-selected-overview{flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){#view-locations .storage-slot{transition:none}#view-locations .storage-slot:hover{transform:none}}
 </style>
+
+<style id="tc-v12-drawer-motion">
+/* A drawer is opened by CSS/DOM within the cabinet drawing only. All outer panels remain light. */
+#view-locations .storage-cab-frame{overflow:visible;perspective:550px}
+#view-locations .storage-drawer{transform:translate3d(0,0,0);transform-origin:left center;transition:transform .46s cubic-bezier(.21,.85,.23,1),box-shadow .46s cubic-bezier(.21,.85,.23,1),background .26s,border-color .26s;will-change:transform}
+#view-locations .storage-drawer.tc-drawer-extracted{z-index:4;transform:translate3d(15px,5px,0) scale(1.04);box-shadow:inset 0 2px 1px #dbf1ff86,8px 12px 16px #0009,0 0 20px #44baff66}
+#view-locations .tc-drawer-tray{max-height:0;opacity:0;overflow:hidden;pointer-events:none;position:relative;z-index:3;margin:0 2px 2px;padding:0 7px;border:1px solid transparent;border-radius:6px;background:linear-gradient(155deg,#163b61 0%,#071c34 75%);box-shadow:none;transform:translateY(-23px) rotateX(-22deg) scale(.9,.5);transform-origin:top center;transition:max-height .55s cubic-bezier(.16,1,.3,1),margin .5s cubic-bezier(.16,1,.3,1),padding .5s cubic-bezier(.16,1,.3,1),opacity .22s,transform .55s cubic-bezier(.16,1,.3,1),border-color .55s,box-shadow .55s}
+#view-locations .tc-drawer-tray.tc-drawer-tray-open{max-height:245px;opacity:1;pointer-events:auto;margin:7px 2px 12px;padding:10px 8px 9px;border-color:#4c9bce;box-shadow:inset 0 2px 7px #6bc6ff2a,0 11px 17px #0009,0 0 13px #1ca4ff25;transform:translateX(12px) translateY(2px) rotateX(3deg) scale(1.03)}
+#view-locations .tc-drawer-tray:before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,#398ac8,#c5ebff 45%,#184e79);box-shadow:0 2px 5px #0005}
+#view-locations .tc-drawer-tray-heading{display:flex;justify-content:space-between;align-items:center;gap:4px;margin-bottom:9px;color:#e5f7ff;font-size:9px;font-weight:800;letter-spacing:.035em}
+#view-locations .tc-drawer-tray-heading small{font-size:8px;color:#8cbbdf;white-space:nowrap}
+#view-locations .tc-drawer-mini-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;max-height:155px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#5b9dc5 #102e4c}
+#view-locations .tc-drawer-mini{min-width:0;min-height:27px;background:#0a2740;color:#d7ecfc;border:1px solid #3a6988;border-radius:4px;font-size:10px;font-weight:900;box-shadow:inset 0 1px 2px #0005,0 1px 0 #5eabd544;cursor:pointer;padding:3px;transition:background .12s,border-color .12s}
+#view-locations .tc-drawer-mini.good{border-color:#1e997a;color:#a5f6d3}
+#view-locations .tc-drawer-mini.low{border-color:#d0a045;color:#fce5a4}
+#view-locations .tc-drawer-mini.zero{border-color:#cf5572;color:#ffb2c0}
+#view-locations .tc-drawer-mini.active,#view-locations .tc-drawer-mini.hit{background:#13588a;color:#fff;border:2px solid #80dcff;box-shadow:0 0 7px #40bfff90}
+#view-locations .tc-drawer-mini:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#view-locations .tc-drawer-mini:hover{border-color:#82cbef;background:#19517c}
+@media(max-width:700px){#view-locations .tc-drawer-tray.tc-drawer-tray-open{transform:translateX(6px) translateY(2px) scale(1.02)}#view-locations .storage-drawer.tc-drawer-extracted{transform:translateX(9px) translateY(4px) scale(1.02)}}
+@media(prefers-reduced-motion:reduce){#view-locations .storage-drawer,#view-locations .tc-drawer-tray{transition:none!important}#view-locations .storage-drawer.tc-drawer-extracted{transform:translateX(6px)}#view-locations .tc-drawer-tray.tc-drawer-tray-open{transform:none}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -1043,7 +1065,25 @@ document.addEventListener('click',e=>{
  if(action==='move')openMove(b.dataset.id,b.dataset.type||'salida');
  if(action==='edit')openItem(b.dataset.id);
 });
-$('storage-search').addEventListener('input',e=>{storageUI.search=e.target.value;renderStorageMap();});
+$('storage-search').addEventListener('input',e=>{
+ storageUI.search=e.target.value;
+ const query=storageKey(e.target.value),all=activeItems();
+ const exact=query?all.find(x=>storageKey(x.sku)===query):null;
+ const potential=!exact&&query.length>=5?all.filter(x=>storageKey(x.sku).startsWith(query)):[];
+ const found=exact||(potential.length===1?potential[0]:null);
+ if(found){
+  const place=storageParseCabinet(found.location);
+  if(place&&place.drawer&&place.slot){
+   storageUI.tab='cabinet';storageUI.cabinet=place.cabinet;storageUI.drawer=place.drawer;storageUI.slot=place.slot;
+  }else if(found.location){storageUI.tab='rack';storageUI.rack=found.location;}
+ }
+ renderStorageMap();
+});
+$('storage-search').addEventListener('keydown',e=>{
+ if(e.key!=='Enter')return;
+ const matches=storageSearchMatches();
+ if(matches.length===1){e.preventDefault();storageFindItem(matches[0].id);}
+});
 $('storage-cab-select').addEventListener('change',e=>{storageUI.cabinet=e.target.value;storageUI.drawer='A';storageUI.slot=1;renderStorageMap();});
 $('storage-drawer-count').addEventListener('change',storageSaveConfig);
 $('storage-bin-count').addEventListener('change',storageSaveConfig);
@@ -1116,6 +1156,40 @@ function decorateDrawers(){
  var nodes=document.getElementById('storage-cab-drawers');if(!nodes)return;
  nodes.querySelectorAll('.storage-drawer').forEach(function(btn){
   btn.dataset.tcAttention=String(!!btn.querySelector('.warn'));
+  btn.setAttribute('aria-expanded',String(btn.classList.contains('active')));
+ });
+ var selected=nodes.querySelector('.storage-drawer.active');
+ if(!selected||nodes.querySelector('.tc-drawer-tray'))return;
+ var count=storageLayout().bins;
+ var tray=document.createElement('div');tray.className='tc-drawer-tray';tray.id='tc-open-drawer-tray';
+ tray.setAttribute('role','group');
+ tray.setAttribute('aria-label','Interior del cajón '+storageUI.drawer+' con '+count+' compartimentos');
+ selected.setAttribute('aria-controls',tray.id);
+ var top=document.createElement('div');top.className='tc-drawer-tray-heading';
+ var heading=document.createElement('strong');heading.textContent='INTERIOR · '+storageUI.drawer;
+ var sub=document.createElement('small');sub.textContent=count+' compartimentos';
+ top.append(heading,sub);tray.append(top);
+ var grid=document.createElement('div');grid.className='tc-drawer-mini-grid';
+ var query=storageKey(storageUI.search);
+ for(var i=1;i<=count;i++){
+  var items=storageCabItems(storageUI.cabinet,storageUI.drawer,i);
+  var condition=stateOf(items);
+  var mini=document.createElement('button');mini.type='button';mini.className='tc-drawer-mini '+condition;
+  if(i===storageUI.slot)mini.classList.add('active');
+  if(query&&items.some(function(x){return storageKey(x.sku).includes(query)||storageKey(x.name).includes(query)}))mini.classList.add('hit');
+  mini.dataset.storageAction='slot';mini.dataset.value=String(i);
+  mini.textContent=String(i).padStart(2,'0');
+  mini.title='Compartimento '+String(i).padStart(2,'0')+' · '+items.length+' SKU registrados';
+  mini.setAttribute('aria-label',mini.title);
+  mini.setAttribute('aria-current',i===storageUI.slot?'location':'false');
+  grid.append(mini);
+ }
+ tray.append(grid);
+ selected.after(tray);
+ requestAnimationFrame(function(){
+  if(!tray.isConnected||!selected.isConnected)return;
+  selected.classList.add('tc-drawer-extracted');
+  tray.classList.add('tc-drawer-tray-open');
  });
 }
 function fetchVisualPhoto(sku,target){
