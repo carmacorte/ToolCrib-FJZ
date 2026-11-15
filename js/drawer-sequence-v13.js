@@ -69,7 +69,7 @@ function list(){
  if(!results.length)phase(1,'No se encontraron números de parte que coincidan.',true);
 }
 function highlight(letter){
- host.querySelectorAll('.tc-iso-drawer').forEach(el=>el.classList.toggle('tc-seq-target',el.getAttribute('data-value')===letter));
+ host.querySelectorAll('.tc3d-drawer').forEach(el=>el.classList.toggle('is-selected',el.getAttribute('data-value')===letter));
 }
 function start(item){
  token++;const mine=token;clearTimeout(timerA);clearTimeout(timerB);lastId=item.id;
@@ -96,7 +96,7 @@ function start(item){
  timerA=delay(()=>{
   if(mine!==token)return;
   phase(3,'Abriendo virtualmente la gaveta '+loc.drawer+'…');
-  const drawer=Array.from(host.querySelectorAll('.tc-iso-drawer')).find(x=>x.getAttribute('data-value')===loc.drawer);
+  const drawer=Array.from(host.querySelectorAll('.tc3d-drawer')).find(x=>x.getAttribute('data-value')===loc.drawer);
   if(drawer&&drawer.getAttribute('aria-expanded')!=='true'){
    drawer.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));
   }
