@@ -253,7 +253,7 @@
   <button class="nav-btn" data-nav="equipment"><span class="sym">⚙</span> Catálogo de equipos</button>
   <button class="nav-btn" data-nav="settings"><span class="sym">⚒</span> Datos y respaldos</button>
  </nav></div>
- <div class="sidebar-foot"><strong><span class="status-dot"></span>Archivo independiente</strong><small>Sin servidor ni internet. Información en el navegador de esta PC.</small><small style="margin-top:8px" id="sidebar-version">Versión 8.0 · Mapa interactivo + Excel + Sorts</small></div>
+ <div class="sidebar-foot"><strong><span class="status-dot"></span>Archivo independiente</strong><small>Sin servidor ni internet. Información en el navegador de esta PC.</small><small style="margin-top:8px" id="sidebar-version">Versión 12.0 · Gavetas animadas + Excel</small></div>
 </aside>
 <div class="main">
  <header class="topbar"><div class="crumb">FJZ <span style="padding:0 8px;color:#bed0df">/</span> <strong id="crumb-name">Resumen general</strong></div><div class="top-actions"><span class="offline">◉ Datos locales · Sin servidor</span><span class="avatar">TC</span></div></header>
@@ -592,7 +592,7 @@ function renderSessionUI(){
  const banner=$('startup-clean-banner');
  if(banner){banner.hidden=!clean||!!(db.items.length||db.moves.length);}
  const quick=$('session-recover-quick');if(quick)quick.disabled=!saved;
- const sidebar=$('sidebar-version');if(sidebar)sidebar.textContent='Versión 8.0 · Mapa interactivo + Excel + Sorts';
+ const sidebar=$('sidebar-version');if(sidebar)sidebar.textContent='Versión 12.0 · Gavetas animadas + Excel';
 }
 
 function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(db));return true;}catch(e){alert('No fue posible guardar. El almacenamiento del navegador puede estar lleno o bloqueado. Descarga un respaldo JSON.');return false;}}
