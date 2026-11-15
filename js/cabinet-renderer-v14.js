@@ -31,33 +31,33 @@ function draw(){
   el('circle',{cx:x,cy:y,r:17,fill:'#09223e',stroke:'#5595c3','stroke-width':4},svg);
   el('circle',{cx:x,cy:y,r:7,fill:'#3278a9',stroke:'#d2ebff','stroke-width':2},svg);
  });
- // All top edges share the same depth vector (-55,-36).
- el('polygon',{points:'43,124 98,160 98,550 43,514',fill:'url(#v14-side)',stroke:'#5d9bc7','stroke-width':2},svg);
- el('polygon',{points:'43,124 273,100 328,136 98,160',fill:'url(#v14-top)',stroke:'#a3d4f1','stroke-width':2},svg);
- el('polygon',{points:'98,160 328,136 328,540 98,564',fill:'url(#v14-front)',stroke:'#6da8d1','stroke-width':2.5},svg);
- el('path',{d:'M98 564 L328 540 L328 554 L98 578Z',fill:'#1b466b',stroke:'#70b0da'},svg);
- const step=380/buttons.length;
+ // Oblique 3D projection: front top edge (130,170)->(328,149), depth vector (-95,-55).
+ el('polygon',{points:'35,115 130,170 130,552 35,497',fill:'url(#v14-side)',stroke:'#5d9bc7','stroke-width':2},svg);
+ el('polygon',{points:'35,115 233,94 328,149 130,170',fill:'url(#v14-top)',stroke:'#a3d4f1','stroke-width':2},svg);
+ el('polygon',{points:'130,170 328,149 328,531 130,552',fill:'url(#v14-front)',stroke:'#6da8d1','stroke-width':2.5},svg);
+ el('path',{d:'M130 552 L328 531 L328 545 L130 566Z',fill:'#1b466b',stroke:'#70b0da'},svg);
+ const step=354/buttons.length;
  const rows=buttons.map((b,i)=>({letter:b.dataset.value,index:i,count:b.querySelector('em')?.textContent||'0 SKU',active:b.classList.contains('active'),hit:(b.querySelector('b')?.textContent||'').includes('★'),opened:b.dataset.value===open}));
  // Closed drawers first; opened drawer last, keeping its own components grouped.
  rows.sort((a,b)=>Number(a.opened)-Number(b.opened)).forEach(row=>{
-  const y=169+row.index*step,h=step-4;
-  if(row.opened)el('polygon',{points:`108,${y} 318,${y-20} 318,${y+h-20} 108,${y+h}`,fill:'#041a30',stroke:'#6aa8d0','stroke-width':1.5},svg);
+  const y=178+row.index*step,h=step-4;
+  if(row.opened)el('polygon',{points:`138,${y} 318,${y-19} 318,${y+h-19} 138,${y+h}`,fill:'#041a30',stroke:'#6aa8d0','stroke-width':1.5},svg);
   const group=el('g',{class:'tc-v14-drawer'+(row.opened?' is-open':'')+(row.active?' is-selected':''),'data-storage-action':'drawer','data-value':row.letter,role:'button',tabindex:0,'aria-expanded':String(row.opened),'aria-label':'Gaveta '+row.letter+', '+row.count},svg);
   el('title',{},group,'Gaveta '+row.letter);
   if(row.opened){
    // Tray floor is a shallow trapezoid immediately behind its face, not 40px above it.
-   el('polygon',{points:`108,${y+2} 318,${y-18} 306,${y-27} 96,${y-7}`,class:'tc-v14-tray',fill:'#21577f',stroke:'#9cdbfa','stroke-width':1.6},group);
+   el('polygon',{points:`138,${y+2} 318,${y-17} 291,${y-32} 111,${y-13}`,class:'tc-v14-tray',fill:'#21577f',stroke:'#9cdbfa','stroke-width':1.6},group);
    const bins=Math.min(12,storageLayout().bins);
    for(let k=0;k<bins;k++){
-    const col=k%4,r=Math.floor(k/4),x=115+col*48,yb=y-5+r*2.5-col*.95;
+    const col=k%4,r=Math.floor(k/4),x=145+col*39,yb=y-6-r*4.5-col*.95;
     el('path',{d:`M${x} ${yb} l34 -3`,stroke:k+1===storageUI.slot?'#8ff0ff':'#6aa9c7','stroke-width':k+1===storageUI.slot?2.4:1.2},group);
    }
   }
-  el('polygon',{points:`108,${y} 318,${y-20} 318,${y+h-20} 108,${y+h}`,class:'tc-v14-face',fill:'url(#v14-'+(row.active?'active':'face')+')',stroke:row.active?'#82e4ff':'#5c94bb','stroke-width':row.active?2.7:1.3},group);
-  el('text',{x:120,y:y+h*.68,class:'tc-v14-letter'},group,row.letter);
-  el('path',{d:`M195 ${y+h*.53} L280 ${y+h*.53-8}`,stroke:'#d9eefa','stroke-width':7,'stroke-linecap':'round'},group);
-  el('path',{d:`M195 ${y+h*.53-2} L280 ${y+h*.53-10}`,stroke:'#fff','stroke-width':1.7,'stroke-linecap':'round'},group);
-  el('text',{x:170,y:y+h-7,class:'tc-v14-count','text-anchor':'middle'},group,row.count);
+  el('polygon',{points:`138,${y} 318,${y-19} 318,${y+h-19} 138,${y+h}`,class:'tc-v14-face',fill:'url(#v14-'+(row.active?'active':'face')+')',stroke:row.active?'#82e4ff':'#5c94bb','stroke-width':row.active?2.7:1.3},group);
+  el('text',{x:149,y:y+h*.68,class:'tc-v14-letter'},group,row.letter);
+  el('path',{d:`M211 ${y+h*.53} L286 ${y+h*.53-8}`,stroke:'#d9eefa','stroke-width':7,'stroke-linecap':'round'},group);
+  el('path',{d:`M211 ${y+h*.53-2} L286 ${y+h*.53-10}`,stroke:'#fff','stroke-width':1.7,'stroke-linecap':'round'},group);
+  el('text',{x:191,y:y+h-7,class:'tc-v14-count','text-anchor':'middle'},group,row.count);
   if(row.hit)el('circle',{cx:303,cy:y+6,r:3,fill:'#7ceaff'},group);
  });
  el('text',{x:183,y:605,'text-anchor':'middle',class:'tc-v14-note'},svg,'Selecciona una gaveta para abrirla o cerrarla');
