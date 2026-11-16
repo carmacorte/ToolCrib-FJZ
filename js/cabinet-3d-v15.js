@@ -18,7 +18,7 @@ css.textContent=`
 #view-locations .tc3d-top{width:218px;height:184px;top:83px;transform:rotateX(90deg) translateZ(92px);background:linear-gradient(135deg,#659bc8,#244d77);border-color:#93c5e6}
 #view-locations .tc3d-bottom{width:218px;height:184px;top:83px;transform:rotateX(-90deg) translateZ(258px)}
 #view-locations .tc3d-drawer{position:relative;flex:1;min-height:0;display:block;width:100%;padding:0;border:0;background:transparent;color:white;text-align:left;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.2,.8,.2,1);cursor:pointer;pointer-events:auto}
-#view-locations .tc3d-drawer.is-open{transform:translateZ(110px)}
+#view-locations .tc3d-drawer.is-open{transform:translateZ(125px);z-index:20}
 #view-locations .tc3d-panel{position:absolute;inset:0;background:linear-gradient(150deg,#2b669a,#102d51);border:1px solid #5896c6;box-shadow:inset 0 1px 3px #78b7e4;display:flex;align-items:center;padding:0 10px;font-size:18px;font-weight:800;backface-visibility:hidden}
 #view-locations .tc3d-drawer.is-selected .tc3d-panel{border:2px solid #62d6ff;box-shadow:0 0 11px #00bfff8a,inset 0 0 9px #008cde}
 #view-locations .tc3d-drawer:focus-visible .tc3d-panel{outline:2px solid #fff;outline-offset:2px}
@@ -61,12 +61,30 @@ function build(){
   const wheel=div('tc3d-wheel',cabinet);wheel.style.left=x;wheel.style.transform=`translateZ(${z})`;
  }
  items.forEach(item=>{
-  const button=document.createElement('button');button.type='button';button.className='tc3d-drawer'+(open===item.letter?' is-open':'')+(item.selected?' is-selected':'');
+  const button=document.createElement('button');button.type='button';button.className='tc3d-drawer'+(item.selected?' is-selected':'');
   button.dataset.storageAction='drawer';button.dataset.value=item.letter;button.title=item.title;button.setAttribute('aria-expanded',String(open===item.letter));
   const tray=div('tc3d-tray',button);div('tc3d-floor',tray);
   const panel=div('tc3d-panel',button);panel.append(document.createTextNode(item.letter));div('tc3d-handle',panel);
   const count=div('tc3d-count',panel);count.textContent=item.count;
-  button.addEventListener('click',()=>{if(dragDistance>5)return;open=open===item.letter?null:item.letter;});
+  button.addEventListener('click',e=>{
+   e.stopPropagation();
+   if(dragDistance>5)return;
+   const wasOpen=open===item.letter;
+   open=wasOpen?null:item.letter;
+   storageUI.drawer=item.letter;
+   storageUI.slot=1;
+   lastSelected=item.letter;
+   // Preserve the 3D scene; changing the inventory selection must not recreate the cabinet.
+   front.querySelectorAll('.tc3d-drawer').forEach(drawer=>{
+    const selected=drawer.dataset.value===item.letter;
+    drawer.classList.toggle('is-selected',selected);
+    drawer.classList.toggle('is-open',drawer.dataset.value===open);
+    drawer.setAttribute('aria-expanded',String(drawer.dataset.value===open));
+   });
+   // Update the compartment panel through the existing inventory renderer.
+   // The observer will rebuild the scene if that renderer replaces the source buttons.
+   if(typeof renderStorageMap==='function')renderStorageMap();
+  });
   front.append(button);
  });
  const toolbar=div('tc3d-toolbar',scene);
@@ -78,6 +96,11 @@ function build(){
  scene.addEventListener('pointerup',release);scene.addEventListener('pointercancel',release);
  scene.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(.48,Math.min(1.45,zoom-e.deltaY*.001));updateCamera()},{passive:false});
  updateCamera();
+ // Apply opening after insertion so CSS transitions run on iOS Safari.
+ if(open)requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  const drawer=[...front.querySelectorAll('.tc3d-drawer')].find(x=>x.dataset.value===open);
+  if(drawer){drawer.classList.add('is-open');drawer.setAttribute('aria-expanded','true')}
+ }));
 }
 new MutationObserver(()=>{if(host.querySelector(':scope > button.storage-drawer'))build()}).observe(host,{childList:true});
 build();
