@@ -7,7 +7,7 @@ function imageFor(sku){const id=normalize(sku);return records[id]?.image||sample
 window.ToolCribDemoPhotos={get:sampleUrl};
 const photoStyle=document.createElement('style');
 photoStyle.textContent=`
-#view-locations .tc-map-material-photo{float:left;max-width:88px;width:28%;min-width:68px;margin:0 12px 7px 0;text-align:center}
+#view-locations .tc-map-material-photo{float:left;max-width:88px;width:28%;min-width:68px;margin:0 12px 7px 0;text-align:center;cursor:pointer}
 #view-locations .tc-map-material-photo img{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:#fff;border:1px solid #dfebf5;border-radius:9px}
 #view-locations .tc-map-material-photo small{display:block;font-size:9px;color:#697e92;margin-top:3px;line-height:1.2}
 #view-locations .storage-sku-card:after{content:"";display:block;clear:both}
@@ -56,6 +56,10 @@ function decorateMap(){
   if(!url){wrap?.remove();return}
   if(!wrap){
    wrap=document.createElement('figure');wrap.className='tc-map-material-photo';
+   wrap.tabIndex=0;wrap.setAttribute('role','button');wrap.setAttribute('aria-label','Ampliar fotografía del material');
+   const openPreview=()=>{active=normalize(card.querySelector('strong')?.textContent);show();dlg.showModal()};
+   wrap.addEventListener('click',openPreview);
+   wrap.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPreview()}});
    const img=document.createElement('img');img.loading='lazy';
    const label=document.createElement('small');wrap.append(img,label);card.prepend(wrap);
   }
