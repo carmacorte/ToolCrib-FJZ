@@ -67,7 +67,11 @@ function decorateMap(){
   if(img.getAttribute('src')!==url)img.src=url;
   img.alt=(demo?'Ilustración de ':'Fotografía de ')+sku;
   img.title=demo?'Imagen ilustrativa, no verificada con pieza física':'Foto del material';
-  wrap.querySelector('small').textContent=demo?'Imagen ilustrativa':'Foto del material';
+  // Critical: only update DOM text when it really changes. Unconditional
+  // textContent triggered its own MutationObserver indefinitely on the map.
+  const label=wrap.querySelector('small');
+  const caption=demo?'Imagen ilustrativa':'Foto del material';
+  if(label&&label.textContent!==caption)label.textContent=caption;
  });
  document.querySelectorAll('#view-locations .tc-selected-overview').forEach(overview=>{
   const target=overview.querySelector('.tc-selected-photo');if(!target||target.querySelector('img'))return;
@@ -83,7 +87,9 @@ const target=document.getElementById('inventory-body');
 if(target){new MutationObserver(decorate).observe(target,{childList:true});decorate()}
 ['storage-slot-detail','storage-rack-detail'].forEach(id=>{
  const root=document.getElementById(id);
- if(root)new MutationObserver(decorateMap).observe(root,{childList:true,subtree:true});
+ // renderStorageMap replaces these panel contents directly. Observing only
+ // direct children avoids reacting to thumbnails and labels we insert ourselves.
+ if(root)new MutationObserver(decorateMap).observe(root,{childList:true});
 });
 document.getElementById('tc-photo-close').onclick=()=>dlg.close();
 document.getElementById('tc-photo-upload').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>3*1024*1024){alert('Usa JPG, PNG o WebP de máximo 3 MB.');return}const reader=new FileReader();reader.onload=async()=>{records[active]={sku:active,image:reader.result,verified:false};await put(records[active]);show();decorate();decorateMap()};reader.readAsDataURL(f);e.target.value=''};
