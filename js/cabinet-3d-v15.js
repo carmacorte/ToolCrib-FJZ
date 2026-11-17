@@ -6,12 +6,12 @@ const host=document.getElementById('storage-cab-drawers');
 if(!host)return;
 const css=document.createElement('style');
 css.textContent=`
-#view-locations #storage-cab-drawers.tc3d-host{display:block!important;position:relative!important;min-height:510px!important;padding:0!important;overflow:hidden!important;isolation:isolate;background:radial-gradient(ellipse at 50% 45%,#17426a,#061529 78%)!important;touch-action:pan-y}
-#view-locations .tc3d-scene{position:relative;width:100%;height:510px;overflow:hidden;perspective:900px;touch-action:pan-y;user-select:none}
+#view-locations #storage-cab-drawers.tc3d-host{display:block!important;position:relative!important;min-height:510px!important;padding:0!important;overflow:hidden!important;isolation:isolate;margin:0 auto!important;max-width:none!important;width:100%!important;border:0!important;transform:none!important;box-shadow:none!important;background:radial-gradient(ellipse at 50% 45%,#17426a,#061529 78%)!important;touch-action:pan-y}
+#view-locations .tc3d-scene{position:relative;width:100%;height:510px;overflow:hidden;perspective:900px;-webkit-perspective:900px;touch-action:pan-y;user-select:none}
 #view-locations .tc3d-world{position:absolute;left:50%;top:48%;width:218px;height:350px;transform-style:preserve-3d;transition:transform .14s ease-out;pointer-events:none}
 #view-locations .tc3d-cab{position:absolute;inset:0;transform-style:preserve-3d;pointer-events:none}
 #view-locations .tc3d-wall{position:absolute;box-sizing:border-box;border:2px solid #4788b8;background:linear-gradient(130deg,#245b88,#0b294b 85%);backface-visibility:visible}
-#view-locations .tc3d-front{width:218px;height:350px;transform:translateZ(92px);transform-style:preserve-3d;padding:9px 9px 13px;display:flex;flex-direction:column;gap:3px;border:7px solid #194a77;box-shadow:inset 0 0 17px #020c1e;pointer-events:none}
+#view-locations .tc3d-front{width:218px;height:350px;transform:translateZ(92px);transform-style:preserve-3d;-webkit-transform-style:preserve-3d;padding:9px 9px 13px;display:flex;flex-direction:column;gap:3px;border:7px solid #194a77;box-shadow:inset 0 0 17px #020c1e;pointer-events:none}
 #view-locations .tc3d-back{width:218px;height:350px;transform:rotateY(180deg) translateZ(92px)}
 #view-locations .tc3d-left{width:184px;height:350px;left:17px;transform:rotateY(-90deg) translateZ(109px);background:linear-gradient(110deg,#234e79,#071c36)}
 #view-locations .tc3d-right{width:184px;height:350px;left:17px;transform:rotateY(90deg) translateZ(109px)}
@@ -33,12 +33,13 @@ css.textContent=`
 #view-locations .tc3d-tray-side.left{left:2px}
 #view-locations .tc3d-tray-side.right{left:calc(100% - 3px)}
 #view-locations .tc3d-tray-back{position:absolute;left:2px;right:2px;top:0;height:34px;transform:translateZ(-175px);background:#113e63;border:1px solid #4aa2cc}
-#view-locations .tc3d-drawer{will-change:transform}
+#view-locations .tc3d-drawer{will-change:transform;-webkit-transform-style:preserve-3d}
 #view-locations .tc3d-drawer.is-open .tc3d-panel{border-color:#7edcfa;box-shadow:0 0 16px #00c6ff66,inset 0 2px 5px #a2d9ff55}
 #view-locations .tc3d-wheel{position:absolute;bottom:-19px;width:31px;height:31px;border:6px solid #5292c4;border-radius:50%;background:#061222;box-shadow:inset 0 0 0 5px #1d4265}
 #view-locations .tc3d-toolbar{position:absolute;right:10px;bottom:8px;display:flex;gap:6px;z-index:5}
 #view-locations .tc3d-toolbar button{border:1px solid #5186af;background:#102e4ee8;color:#e9f7ff;border-radius:7px;padding:6px 9px;font-size:11px;cursor:pointer}
 #view-locations .tc3d-hint{position:absolute;left:10px;top:10px;z-index:5;color:#b1d4eb;font-size:10px;pointer-events:none}
+#view-locations #storage-cab-drawers.tc3d-host::before,#view-locations #storage-cab-drawers.tc3d-host::after{display:none!important;content:none!important}
 #view-locations .tc3d-scene{cursor:grab}#view-locations .tc3d-scene.dragging{cursor:grabbing;touch-action:none}
 @media(max-width:650px){#view-locations #storage-cab-drawers.tc3d-host{min-height:480px!important}#view-locations .tc3d-scene{height:480px}}
 @media(prefers-reduced-motion:reduce){#view-locations .tc3d-drawer,#view-locations .tc3d-world{transition:none!important}}
@@ -73,7 +74,6 @@ function build(){
   const count=div('tc3d-count',panel);count.textContent=item.count;
   button.addEventListener('click',e=>{
    e.stopPropagation();
-   if(dragDistance>5)return;
    const wasOpen=open===item.letter;
    open=wasOpen?null:item.letter;
    const changed=storageUI.drawer!==item.letter;
