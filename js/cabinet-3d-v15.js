@@ -25,7 +25,12 @@ css.textContent=`
 #view-locations .tc3d-handle{position:absolute;width:88px;height:8px;right:10px;top:42%;border-radius:4px;background:linear-gradient(#fff,#a6bed5 55%,#426987);box-shadow:2px 3px 4px #0008}
 #view-locations .tc3d-count{position:absolute;bottom:2px;left:40px;font-size:8px;font-weight:600;color:#c7e5f8}
 #view-locations .tc3d-tray{position:absolute;inset:0;transform-style:preserve-3d;pointer-events:none}
-#view-locations .tc3d-floor{position:absolute;left:2px;right:2px;top:0;height:177px;transform-origin:top;transform:rotateX(-90deg);background:linear-gradient(#082b49,#0879a8);border:2px solid #53cfff;box-shadow:inset 0 0 18px #00c6ff55}
+#view-locations .tc3d-floor{position:absolute;left:2px;right:2px;top:0;height:177px;transform-origin:top;transform:rotateX(-90deg);transform-style:preserve-3d;-webkit-transform-style:preserve-3d;background:linear-gradient(#082b49,#0879a8);border:2px solid #53cfff;box-shadow:inset 0 0 18px #00c6ff55}
+#view-locations .tc3d-bin{position:absolute;box-sizing:border-box;border:1px solid #3292bd55;background:linear-gradient(155deg,#0b426d22,#082e5222);pointer-events:none}
+#view-locations .tc3d-bin.is-target{background:#14ccff66;box-shadow:inset 0 0 14px #51e6ffcc,0 0 11px #23d7ff88;border-color:#b2f4ff}
+#view-locations .tc3d-partition{position:absolute;box-sizing:border-box;pointer-events:none;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;backface-visibility:visible;-webkit-backface-visibility:visible;background:linear-gradient(140deg,#174e78e8,#0a304fe8);border:1px solid #64c7f0;box-shadow:inset 0 2px 3px #b7ecff40}
+#view-locations .tc3d-partition.column{top:0;height:100%;width:24px;transform-origin:top left;transform:rotateY(90deg)}
+#view-locations .tc3d-partition.row{left:0;width:100%;height:24px;transform-origin:top left;transform:rotateX(-90deg)}
 #view-locations .tc3d-traywall{position:absolute;top:0;height:177px;width:18px;transform-origin:top;background:#103b5d;border:1px solid #57a5d1}
 #view-locations .tc3d-traywall.left{left:0;transform:rotateX(-90deg) rotateY(90deg)}
 #view-locations .tc3d-traywall.right{right:0;transform:rotateX(-90deg) rotateY(90deg)}
@@ -46,8 +51,32 @@ css.textContent=`
 `;
 document.head.append(css);
 host.classList.add('tc3d-host');
-let cab='',open=null,lastSelected='',yaw=-28,pitch=-12,zoom=.82,dragging=false,dragDistance=0,px=0,py=0,pointer=null,scene=null,world=null,spin=false,raf=0;
+let cab='',open=null,lastSelected='',renderedBins=12,yaw=-28,pitch=-12,zoom=.82,dragging=false,dragDistance=0,px=0,py=0,pointer=null,scene=null,world=null,spin=false,raf=0;
 function div(cls,parent){const e=document.createElement('div');e.className=cls;parent.append(e);return e}
+function binCount(){const value=Number(typeof storageLayout==='function'?storageLayout().bins:12);return Number.isFinite(value)?Math.max(1,Math.min(60,Math.round(value))):12}
+function addCompartments(floor){
+ const total=binCount();renderedBins=total;
+ const cols=total<=4?total:total<=12?4:total<=24?6:8;
+ const rows=Math.ceil(total/cols);
+ for(let n=1;n<=total;n++){
+  const c=(n-1)%cols,r=Math.floor((n-1)/cols);
+  const cell=div('tc3d-bin',floor);
+  cell.dataset.slot=String(n);
+  cell.style.left=(100*c/cols)+'%';
+  cell.style.top=(100*r/rows)+'%';
+  cell.style.width=(100/cols)+'%';
+  cell.style.height=(100/rows)+'%';
+ }
+ // Real 3D separators: longitudinal walls and crosswise walls rise 24px above tray.
+ for(let c=1;c<cols;c++){
+  const wall=div('tc3d-partition column',floor);
+  wall.style.left=(100*c/cols)+'%';
+ }
+ for(let r=1;r<rows;r++){
+  const wall=div('tc3d-partition row',floor);
+  wall.style.top=(100*r/rows)+'%';
+ }
+}
 function updateCamera(){if(world)world.style.transform=`translate(-50%,-50%) scale(${zoom}) rotateX(${pitch}deg) rotateY(${yaw}deg)`}
 function stopSpin(){spin=false;if(raf)cancelAnimationFrame(raf);raf=0}
 function tick(){if(!spin)return;yaw=(yaw+.4)%360;updateCamera();raf=requestAnimationFrame(tick)}
@@ -69,7 +98,7 @@ function build(){
  items.forEach(item=>{
   const button=document.createElement('button');button.type='button';button.className='tc3d-drawer'+(item.selected?' is-selected':'')+(open===item.letter?' is-open':'');
   button.dataset.storageAction='drawer';button.dataset.value=item.letter;button.title=item.title;button.setAttribute('aria-expanded',String(open===item.letter));
-  const tray=div('tc3d-tray',button);div('tc3d-floor',tray);div('tc3d-tray-side left',tray);div('tc3d-tray-side right',tray);div('tc3d-tray-back',tray);
+  const tray=div('tc3d-tray',button);const floor=div('tc3d-floor',tray);addCompartments(floor);div('tc3d-tray-side left',tray);div('tc3d-tray-side right',tray);div('tc3d-tray-back',tray);
   const panel=div('tc3d-panel',button);panel.append(document.createTextNode(item.letter));div('tc3d-handle',panel);
   const count=div('tc3d-count',panel);count.textContent=item.count;
   button.addEventListener('click',e=>{
@@ -104,6 +133,9 @@ function paintSelection(){
   drawer.classList.toggle('is-selected',letter===storageUI.drawer);
   drawer.classList.toggle('is-open',letter===open);
   drawer.setAttribute('aria-expanded',String(letter===open));
+  drawer.querySelectorAll('.tc3d-bin').forEach(bin=>{
+   bin.classList.toggle('is-target',letter===storageUI.drawer&&Number(bin.dataset.slot)===Number(storageUI.slot));
+  });
  });
 }
 // Invoked by the application's map renderer to refresh stock and selection
@@ -114,7 +146,7 @@ function sync(drawerHTML){
  template.innerHTML=drawerHTML;
  const rows=[...template.content.querySelectorAll('button.storage-drawer')];
  const drawers=[...scene.querySelectorAll('.tc3d-drawer')];
- if(!rows.length||rows.length!==drawers.length)return false;
+ if(!rows.length||rows.length!==drawers.length||renderedBins!==binCount())return false;
  for(let i=0;i<rows.length;i++){
   if(drawers[i].dataset.value!==rows[i].dataset.value)return false;
  }
@@ -127,7 +159,7 @@ function sync(drawerHTML){
  paintSelection();
  return true;
 }
-window.ToolCribCabinet3D={sync,version:'15.5',openDrawer(letter){
+window.ToolCribCabinet3D={sync,version:'15.8',openDrawer(letter){
  const drawer=[...host.querySelectorAll('.tc3d-drawer')].find(x=>x.dataset.value===letter);
  if(drawer){if(drawer.getAttribute('aria-expanded')!=='true')drawer.click();return true}
  return false;
