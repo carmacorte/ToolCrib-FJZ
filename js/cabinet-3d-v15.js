@@ -18,7 +18,7 @@ css.textContent=`
 #view-locations .tc3d-top{width:218px;height:184px;top:83px;transform:rotateX(90deg) translateZ(92px);background:linear-gradient(135deg,#659bc8,#244d77);border-color:#93c5e6}
 #view-locations .tc3d-bottom{width:218px;height:184px;top:83px;transform:rotateX(-90deg) translateZ(258px)}
 #view-locations .tc3d-drawer{position:relative;flex:1;min-height:0;display:block;width:100%;padding:0;border:0;background:transparent;color:white;text-align:left;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.2,.8,.2,1);cursor:pointer;pointer-events:auto}
-#view-locations .tc3d-drawer.is-open{transform:translateZ(137px);z-index:20;filter:drop-shadow(0 8px 11px #0008)}
+#view-locations .tc3d-drawer.is-open{transform:translateZ(137px);z-index:20}
 #view-locations .tc3d-panel{position:absolute;inset:0;background:linear-gradient(150deg,#2b669a,#102d51);border:1px solid #5896c6;box-shadow:inset 0 1px 3px #78b7e4;display:flex;align-items:center;padding:0 10px;font-size:18px;font-weight:800;backface-visibility:hidden}
 #view-locations .tc3d-drawer.is-selected .tc3d-panel{border:2px solid #62d6ff;box-shadow:0 0 11px #00bfff8a,inset 0 0 9px #008cde}
 #view-locations .tc3d-drawer:focus-visible .tc3d-panel{outline:2px solid #fff;outline-offset:2px}
