@@ -11,14 +11,14 @@ css.textContent=`
 #view-locations .tc3d-world{position:absolute;left:50%;top:48%;width:218px;height:350px;transform-style:preserve-3d;transition:transform .14s ease-out;pointer-events:none}
 #view-locations .tc3d-cab{position:absolute;inset:0;transform-style:preserve-3d;pointer-events:none}
 #view-locations .tc3d-wall{position:absolute;box-sizing:border-box;border:2px solid #4788b8;background:linear-gradient(130deg,#245b88,#0b294b 85%);backface-visibility:visible}
-#view-locations .tc3d-front{width:218px;height:350px;transform:translateZ(92px);padding:9px 9px 13px;display:flex;flex-direction:column;gap:3px;border:7px solid #194a77;box-shadow:inset 0 0 17px #020c1e;pointer-events:none}
+#view-locations .tc3d-front{width:218px;height:350px;transform:translateZ(92px);transform-style:preserve-3d;padding:9px 9px 13px;display:flex;flex-direction:column;gap:3px;border:7px solid #194a77;box-shadow:inset 0 0 17px #020c1e;pointer-events:none}
 #view-locations .tc3d-back{width:218px;height:350px;transform:rotateY(180deg) translateZ(92px)}
 #view-locations .tc3d-left{width:184px;height:350px;left:17px;transform:rotateY(-90deg) translateZ(109px);background:linear-gradient(110deg,#234e79,#071c36)}
 #view-locations .tc3d-right{width:184px;height:350px;left:17px;transform:rotateY(90deg) translateZ(109px)}
 #view-locations .tc3d-top{width:218px;height:184px;top:83px;transform:rotateX(90deg) translateZ(92px);background:linear-gradient(135deg,#659bc8,#244d77);border-color:#93c5e6}
 #view-locations .tc3d-bottom{width:218px;height:184px;top:83px;transform:rotateX(-90deg) translateZ(258px)}
 #view-locations .tc3d-drawer{position:relative;flex:1;min-height:0;display:block;width:100%;padding:0;border:0;background:transparent;color:white;text-align:left;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.2,.8,.2,1);cursor:pointer;pointer-events:auto}
-#view-locations .tc3d-drawer.is-open{transform:translateZ(125px);z-index:20}
+#view-locations .tc3d-drawer.is-open{transform:translateZ(137px);z-index:20;filter:drop-shadow(0 8px 11px #0008)}
 #view-locations .tc3d-panel{position:absolute;inset:0;background:linear-gradient(150deg,#2b669a,#102d51);border:1px solid #5896c6;box-shadow:inset 0 1px 3px #78b7e4;display:flex;align-items:center;padding:0 10px;font-size:18px;font-weight:800;backface-visibility:hidden}
 #view-locations .tc3d-drawer.is-selected .tc3d-panel{border:2px solid #62d6ff;box-shadow:0 0 11px #00bfff8a,inset 0 0 9px #008cde}
 #view-locations .tc3d-drawer:focus-visible .tc3d-panel{outline:2px solid #fff;outline-offset:2px}
@@ -29,6 +29,12 @@ css.textContent=`
 #view-locations .tc3d-traywall{position:absolute;top:0;height:177px;width:18px;transform-origin:top;background:#103b5d;border:1px solid #57a5d1}
 #view-locations .tc3d-traywall.left{left:0;transform:rotateX(-90deg) rotateY(90deg)}
 #view-locations .tc3d-traywall.right{right:0;transform:rotateX(-90deg) rotateY(90deg)}
+#view-locations .tc3d-tray-side{position:absolute;top:0;width:177px;height:34px;transform-origin:0 0;transform:rotateY(90deg);background:linear-gradient(135deg,#174b71,#092c4c);border:1px solid #4aadd5;backface-visibility:visible}
+#view-locations .tc3d-tray-side.left{left:2px}
+#view-locations .tc3d-tray-side.right{left:calc(100% - 3px)}
+#view-locations .tc3d-tray-back{position:absolute;left:2px;right:2px;top:0;height:34px;transform:translateZ(-175px);background:#113e63;border:1px solid #4aa2cc}
+#view-locations .tc3d-drawer{will-change:transform}
+#view-locations .tc3d-drawer.is-open .tc3d-panel{border-color:#7edcfa;box-shadow:0 0 16px #00c6ff66,inset 0 2px 5px #a2d9ff55}
 #view-locations .tc3d-wheel{position:absolute;bottom:-19px;width:31px;height:31px;border:6px solid #5292c4;border-radius:50%;background:#061222;box-shadow:inset 0 0 0 5px #1d4265}
 #view-locations .tc3d-toolbar{position:absolute;right:10px;bottom:8px;display:flex;gap:6px;z-index:5}
 #view-locations .tc3d-toolbar button{border:1px solid #5186af;background:#102e4ee8;color:#e9f7ff;border-radius:7px;padding:6px 9px;font-size:11px;cursor:pointer}
@@ -48,7 +54,6 @@ function build(){
  const originals=[...host.querySelectorAll(':scope > button.storage-drawer')];
  if(!originals.length)return;
  if(cab!==storageUI.cabinet){cab=storageUI.cabinet;open=null}
- if(lastSelected&&lastSelected!==storageUI.drawer)open=storageUI.drawer;
  lastSelected=storageUI.drawer;
  const items=originals.map(b=>({letter:b.dataset.value,count:b.querySelector('em')?.textContent||'0 SKU',selected:b.classList.contains('active'),title:b.title}));
  host.replaceChildren();
@@ -61,9 +66,9 @@ function build(){
   const wheel=div('tc3d-wheel',cabinet);wheel.style.left=x;wheel.style.transform=`translateZ(${z})`;
  }
  items.forEach(item=>{
-  const button=document.createElement('button');button.type='button';button.className='tc3d-drawer'+(item.selected?' is-selected':'');
+  const button=document.createElement('button');button.type='button';button.className='tc3d-drawer'+(item.selected?' is-selected':'')+(open===item.letter?' is-open':'');
   button.dataset.storageAction='drawer';button.dataset.value=item.letter;button.title=item.title;button.setAttribute('aria-expanded',String(open===item.letter));
-  const tray=div('tc3d-tray',button);div('tc3d-floor',tray);
+  const tray=div('tc3d-tray',button);div('tc3d-floor',tray);div('tc3d-tray-side left',tray);div('tc3d-tray-side right',tray);div('tc3d-tray-back',tray);
   const panel=div('tc3d-panel',button);panel.append(document.createTextNode(item.letter));div('tc3d-handle',panel);
   const count=div('tc3d-count',panel);count.textContent=item.count;
   button.addEventListener('click',e=>{
@@ -71,18 +76,12 @@ function build(){
    if(dragDistance>5)return;
    const wasOpen=open===item.letter;
    open=wasOpen?null:item.letter;
+   const changed=storageUI.drawer!==item.letter;
    storageUI.drawer=item.letter;
-   storageUI.slot=1;
+   if(changed)storageUI.slot=1;
    lastSelected=item.letter;
-   // Preserve the 3D scene; changing the inventory selection must not recreate the cabinet.
-   front.querySelectorAll('.tc3d-drawer').forEach(drawer=>{
-    const selected=drawer.dataset.value===item.letter;
-    drawer.classList.toggle('is-selected',selected);
-    drawer.classList.toggle('is-open',drawer.dataset.value===open);
-    drawer.setAttribute('aria-expanded',String(drawer.dataset.value===open));
-   });
-   // Update the compartment panel through the existing inventory renderer.
-   // The observer will rebuild the scene if that renderer replaces the source buttons.
+   paintSelection();
+   // The inventory renderer now updates metadata without destroying the animated scene.
    if(typeof renderStorageMap==='function')renderStorageMap();
   });
   front.append(button);
@@ -96,12 +95,43 @@ function build(){
  scene.addEventListener('pointerup',release);scene.addEventListener('pointercancel',release);
  scene.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(.48,Math.min(1.45,zoom-e.deltaY*.001));updateCamera()},{passive:false});
  updateCamera();
- // Apply opening after insertion so CSS transitions run on iOS Safari.
- if(open)requestAnimationFrame(()=>requestAnimationFrame(()=>{
-  const drawer=[...front.querySelectorAll('.tc3d-drawer')].find(x=>x.dataset.value===open);
-  if(drawer){drawer.classList.add('is-open');drawer.setAttribute('aria-expanded','true')}
- }));
+ paintSelection();
 }
+function paintSelection(){
+ if(!scene||!scene.isConnected)return;
+ scene.querySelectorAll('.tc3d-drawer').forEach(drawer=>{
+  const letter=drawer.dataset.value;
+  drawer.classList.toggle('is-selected',letter===storageUI.drawer);
+  drawer.classList.toggle('is-open',letter===open);
+  drawer.setAttribute('aria-expanded',String(letter===open));
+ });
+}
+// Invoked by the application's map renderer to refresh stock and selection
+// without replacing the scene. Returning false requests a full rebuild.
+function sync(drawerHTML){
+ if(!scene||!scene.isConnected||cab!==storageUI.cabinet)return false;
+ const template=document.createElement('template');
+ template.innerHTML=drawerHTML;
+ const rows=[...template.content.querySelectorAll('button.storage-drawer')];
+ const drawers=[...scene.querySelectorAll('.tc3d-drawer')];
+ if(!rows.length||rows.length!==drawers.length)return false;
+ for(let i=0;i<rows.length;i++){
+  if(drawers[i].dataset.value!==rows[i].dataset.value)return false;
+ }
+ for(let i=0;i<rows.length;i++){
+  const source=rows[i],target=drawers[i];
+  target.title=source.title;
+  const count=target.querySelector('.tc3d-count');
+  if(count)count.textContent=source.querySelector('em')?.textContent||'0 SKU';
+ }
+ paintSelection();
+ return true;
+}
+window.ToolCribCabinet3D={sync,version:'15.5',openDrawer(letter){
+ const drawer=[...host.querySelectorAll('.tc3d-drawer')].find(x=>x.dataset.value===letter);
+ if(drawer){if(drawer.getAttribute('aria-expanded')!=='true')drawer.click();return true}
+ return false;
+}};
 new MutationObserver(()=>{if(host.querySelector(':scope > button.storage-drawer'))build()}).observe(host,{childList:true});
 build();
 })();
