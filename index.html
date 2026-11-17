@@ -1695,7 +1695,7 @@ else render();
 <style>.tc-photo{width:36px;height:36px;object-fit:cover;border-radius:7px;margin-right:6px}.tc-photo-btn{padding:5px;border:1px solid #bbc;border-radius:6px;cursor:pointer}.tc-photo-dialog{border:0;border-radius:15px;padding:22px;width:min(540px,92vw);box-shadow:0 20px 65px #0005}.tc-photo-dialog::backdrop{background:#0718279c}.tc-photo-preview{display:block;width:100%;max-height:300px;object-fit:contain}.tc-photo-actions{display:flex;flex-wrap:wrap;gap:9px;margin:15px 0}</style>
 <dialog id="tc-photo-dialog" class="tc-photo-dialog"><h2>Fotografía del material</h2><div id="tc-photo-sku"></div><img id="tc-photo-preview" class="tc-photo-preview" alt="Fotografía de la refacción" hidden><p id="tc-photo-empty">Sin fotografía asignada</p><div class="tc-photo-actions"><label class="btn primary">Cargar fotografía<input id="tc-photo-upload" type="file" accept="image/png,image/jpeg,image/webp" hidden></label><label><input type="checkbox" id="tc-photo-verified"> Fotografía verificada</label><button type="button" class="btn" id="tc-photo-remove">Eliminar foto</button><button type="button" class="btn" id="tc-photo-close">Cerrar</button></div><p>Fotografías guardadas localmente en IndexedDB. No modifican stock ni movimientos.</p><button class="btn" id="tc-photo-export" type="button">Exportar catálogo visual JSON</button><label class="btn">Importar catálogo visual JSON<input type="file" id="tc-photo-import" accept="application/json,.json" hidden></label></dialog>
 <script src="js/identity-audit-v9.js"></script>
-<script src="js/visual-catalog-v8.js"></script>
+<script src="js/visual-catalog-v8.js?v=16-demo-photos"></script>
 <script id="tc-v11-visual-script">
 (function(){
 'use strict';
