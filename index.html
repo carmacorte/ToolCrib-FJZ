@@ -1046,12 +1046,16 @@ function renderStorageMap(){
  const c=storageUI.cabinet,d=storageUI.drawer;
  $('storage-cab-label').textContent=c+' · Cajones';
  $('storage-drawer-label').textContent=`${c} / ${d} · ${config.bins} compartimentos`;
- $('storage-cab-drawers').innerHTML=[...storageDrawers.slice(0,config.drawers)].map(ch=>{
+ const drawerMarkup=[...storageDrawers.slice(0,config.drawers)].map(ch=>{
   const all=active.filter(x=>{const p=storageParseCabinet(x.location);return p&&storageKey(p.cabinet)===storageKey(c)&&p.drawer===ch;});
   const warning=all.some(x=>['zero','low'].includes(stockStatus(x)));
   const hit=all.some(x=>hitIds.has(x.id));
   return `<button class="storage-drawer ${ch===d?'active':''}" data-storage-action="drawer" data-value="${ch}" type="button" title="Gaveta ${ch}: ${all.length} SKU"><b>${ch}${hit&&storageUI.search?' ★':''}</b><span class="storage-drawer-handle"></span><em class="${warning?'warn':''}">${all.length} SKU</em></button>`;
  }).join('');
+ // Keep the independently rendered CSS 3D scene mounted during drawer selection.
+ // Recreate it only when cabinet or drawer count actually changes.
+ const cabinetRenderer=window.ToolCribCabinet3D;
+ if(!cabinetRenderer?.sync?.(drawerMarkup))$('storage-cab-drawers').innerHTML=drawerMarkup;
  $('storage-slot-grid').innerHTML=Array.from({length:config.bins},(_,i)=>{
   const n=i+1,items=storageCabItems(c,d,n),status=storageStatusRank(items),hit=items.some(x=>hitIds.has(x.id));
   return `<button type="button" class="storage-slot ${n===storageUI.slot?'active':''} ${storageUI.search&&hit?'hit':''} ${storageUI.search&&!hit?'dimmed':''}" data-storage-action="slot" data-value="${n}" title="Compartimento ${String(n).padStart(2,'0')}"><span class="slot-dot ${status}"></span><span class="slot-no">${String(n).padStart(2,'0')}</span><span class="slot-count">${items.length} SKU ${hit&&storageUI.search?'· Coincidencia':''}</span></button>`;
@@ -1408,6 +1412,6 @@ refresh();
 })();
 </script>
 <script src="js/drawer-sequence-v13.js"></script>
-<script src="js/cabinet-3d-v15.js?v=15-4-drawer-motion"></script>
+<script src="js/cabinet-3d-v15.js?v=15-5-preserve-3d"></script>
 </body>
 </html>
