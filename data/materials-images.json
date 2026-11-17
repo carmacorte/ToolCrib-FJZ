@@ -6,5 +6,47 @@
     ],
     "verified": false,
     "description": "Ejemplo de asociación. Reemplazar con fotografías verificadas."
+  },
+  "DEMO-NZ-501": {
+    "main": "assets/materials/demo/DEMO-NZ-501.webp",
+    "gallery": [],
+    "verified": false,
+    "description": "Imagen ilustrativa generada por IA de Nozzle SMT tipo 501. No corresponde a una fotografía de material físico validado.",
+    "sample": true
+  },
+  "DEMO-SENSOR-24": {
+    "main": "assets/materials/demo/DEMO-SENSOR-24.webp",
+    "gallery": [],
+    "verified": false,
+    "description": "Imagen ilustrativa generada por IA de Sensor fotoeléctrico 24 V. No corresponde a una fotografía de material físico validado.",
+    "sample": true
+  },
+  "DEMO-FUSE-10A": {
+    "main": "assets/materials/demo/DEMO-FUSE-10A.webp",
+    "gallery": [],
+    "verified": false,
+    "description": "Imagen ilustrativa generada por IA de Fusible industrial 10 A. No corresponde a una fotografía de material físico validado.",
+    "sample": true
+  },
+  "DEMO-ALLEN-SET": {
+    "main": "assets/materials/demo/DEMO-ALLEN-SET.webp",
+    "gallery": [],
+    "verified": false,
+    "description": "Imagen ilustrativa generada por IA de Juego de llaves Allen. No corresponde a una fotografía de material físico validado.",
+    "sample": true
+  },
+  "DEMO-KAPTON-10": {
+    "main": "assets/materials/demo/DEMO-KAPTON-10.webp",
+    "gallery": [],
+    "verified": false,
+    "description": "Imagen ilustrativa generada por IA de Cinta Kapton 10 mm. No corresponde a una fotografía de material físico validado.",
+    "sample": true
+  },
+  "DEMO-STRAP-ESD": {
+    "main": "assets/materials/demo/DEMO-STRAP-ESD.webp",
+    "gallery": [],
+    "verified": false,
+    "description": "Imagen ilustrativa generada por IA de Pulsera ESD con cable. No corresponde a una fotografía de material físico validado.",
+    "sample": true
   }
 }
