@@ -1,0 +1,95 @@
+/* FJZ Inventory ERP visual system v17 - presentation only, no stock mutations */
+:root{--erp-border:#dfe7ef;--erp-subtle:#f3f6fa;--erp-blue:#155ba7;--erp-ink:#182d43;--erp-muted:#708398}
+body{background:#f4f7fb}
+.sidebar{background:#101f32;border-right:1px solid #263c56;gap:24px}
+.sidebar .brand-icon{box-shadow:0 4px 15px #1a74c842;border-radius:11px}
+.sidebar .nav-btn{font-size:12px;font-weight:650;border-radius:8px;padding:11px 12px;transition:background .16s,color .16s}
+.sidebar .nav-btn.active{background:#2b4b70;box-shadow:inset 3px 0 #6bd0f1;color:#fff}
+.sidebar .nav-btn:hover{background:#25405f}
+.sidebar .sidebar-foot{background:#182d46;border-color:#314c68}
+.topbar{height:64px;border-bottom:1px solid #e6ecf2}
+.content{max-width:1740px;padding:27px 30px 50px}
+.page-head{margin-bottom:19px}
+.page-head h1{font-size:26px;letter-spacing:-.7px}
+.page-head .eyebrow{letter-spacing:1.2px}
+.panel{border:1px solid #e1e8f0;border-radius:12px;box-shadow:0 3px 13px #2646650a}
+.panel-h{padding:17px 19px 13px}
+.metric{border-radius:11px;border-color:#e0e8f0;box-shadow:0 3px 11px #12345608}
+.btn{border-radius:8px}
+.btn.primary{background:#1766bf;border-color:#1766bf}
+.btn.primary:hover{background:#1257a6}
+#view-inventory .tc-erp-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:15px}
+#view-inventory .tc-erp-metric{padding:15px 17px;background:#fff;border:1px solid #dde6f0;border-radius:11px;box-shadow:0 2px 9px #28405c08;min-width:0;position:relative}
+#view-inventory .tc-erp-metric:before{content:"";position:absolute;top:16px;right:16px;width:7px;height:7px;border-radius:50%;background:#7eb7e8}
+#view-inventory .tc-erp-metric[data-tone="risk"]:before{background:#ebac4b}
+#view-inventory .tc-erp-metric[data-tone="zero"]:before{background:#d65c69}
+#view-inventory .tc-erp-metric[data-tone="value"]:before{background:#26a17b}
+#view-inventory .tc-erp-metric small{display:block;color:#6d8197;font-size:10px;font-weight:750;letter-spacing:.25px;margin-bottom:8px;text-transform:uppercase}
+#view-inventory .tc-erp-metric strong{display:block;font-size:25px;font-weight:800;letter-spacing:-.7px;color:#183a57;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+#view-inventory .tc-erp-metric[data-tone="risk"] strong{color:#986114}
+#view-inventory .tc-erp-metric[data-tone="zero"] strong{color:#bd495b}
+#view-inventory .tc-erp-metric[data-tone="value"] strong{color:#14775d}
+#view-inventory .tc-erp-metric span{color:#8294a5;font-size:10px;margin-top:5px;display:block}
+#view-inventory .filters{gap:8px;background:#fff;padding:14px 16px 12px}
+#view-inventory .filters .field-input,#view-inventory .filters select{border-radius:8px;border-color:#d9e4ee;min-height:37px;font-size:12px}
+#view-inventory .tc-erp-quickfilters{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:0 16px 12px;background:#fff;border-bottom:1px solid #e9eef5}
+#view-inventory .tc-erp-quickfilters button{border:1px solid #dce6ef;background:#f7f9fc;color:#58708b;border-radius:7px;padding:6px 11px;font-size:10px;font-weight:750;white-space:nowrap}
+#view-inventory .tc-erp-quickfilters button:hover{background:#edf5ff}
+#view-inventory .tc-erp-quickfilters button[aria-pressed="true"]{background:#e8f3ff;color:#0c5ca5;border-color:#9dc6ec}
+#view-inventory .tc-erp-quickfilters em{font-style:normal;opacity:.75;font-variant-numeric:tabular-nums;margin-left:3px}
+#view-inventory .scroll-x{max-width:100%;overflow-x:auto}
+#view-inventory .data-table{min-width:1360px;table-layout:fixed;border-collapse:separate;border-spacing:0}
+#view-inventory .data-table th{background:#f7f9fc;color:#6d7d8c;font-size:9px;letter-spacing:.5px;font-weight:800;border-bottom:1px solid #dfe7ef;padding:0}
+#view-inventory .data-table .sort-head .sort-btn{min-height:46px;padding:9px 12px;font-size:10px;line-height:1.25;text-transform:uppercase;gap:7px}
+#view-inventory .sort-symbol{width:20px;height:20px;flex-basis:20px;font-size:11px;border-color:#d9e3ed}
+#view-inventory .data-table td{padding:11px 12px;border-bottom:1px solid #edf1f6;color:#30445c;font-size:11px;vertical-align:middle}
+#view-inventory .data-table tbody tr:hover{background:#f5f9fd}
+#view-inventory .data-table tbody tr[data-stock-state="zero"] td:first-child{box-shadow:inset 3px 0 #d46b77}
+#view-inventory .data-table tbody tr[data-stock-state="low"] td:first-child{box-shadow:inset 3px 0 #dfa943}
+#view-inventory .data-table thead th:nth-child(1){width:137px}
+#view-inventory .data-table thead th:nth-child(2){width:235px}
+#view-inventory .data-table thead th:nth-child(3){width:148px}
+#view-inventory .data-table thead th:nth-child(4){width:156px}
+#view-inventory .data-table thead th:nth-child(5){width:115px}
+#view-inventory .data-table thead th:nth-child(6){width:95px}
+#view-inventory .data-table thead th:nth-child(7){width:112px}
+#view-inventory .data-table thead th:nth-child(8){width:144px}
+#view-inventory .data-table thead th:nth-child(9){width:113px}
+#view-inventory .data-table thead th:nth-child(10){width:194px;padding:0 12px;text-transform:uppercase}
+#view-inventory .tc-material-cell{position:relative;min-height:51px;padding-bottom:9px;line-height:1.35}
+#view-inventory .tc-material-cell>.tc-photo{float:left;width:45px;height:45px;object-fit:contain;background:#fff;border:1px solid #e5edf6;border-radius:8px;margin:0 9px 4px 0;box-shadow:0 1px 3px #17395312}
+#view-inventory .tc-material-cell>.sku{font-size:10px;overflow-wrap:anywhere;padding-top:3px;font-family:inherit;font-weight:800;color:#1c598e}
+#view-inventory .tc-material-cell .badge-demo{display:inline-block;font-size:8px;padding:2px 5px;border-radius:4px;margin-top:4px}
+#view-inventory .tc-material-cell .tc-photo-btn{display:inline-block;border:0;background:transparent;color:#6288ac;font-size:9px;font-weight:700;padding:3px 0;margin-top:4px;cursor:pointer}
+#view-inventory .tc-material-cell .tc-photo-btn:hover{text-decoration:underline}
+#view-inventory .tc-erp-desc{font-size:12px;font-weight:760;color:#1d3148;line-height:1.3;max-width:215px;white-space:normal;overflow-wrap:anywhere}
+#view-inventory .tc-erp-sub{margin-top:4px;font-size:10px;color:#8092a5;line-height:1.2;max-width:210px;overflow:hidden;text-overflow:ellipsis}
+#view-inventory .tc-erp-category{font-size:11px;font-weight:730;color:#3a566f;white-space:normal;line-height:1.3}
+#view-inventory .tc-erp-location{display:inline-flex;max-width:100%;border-radius:6px;padding:5px 7px;border:1px solid #dae7f4;background:#f1f7fd;font-size:10px;font-weight:700;color:#27628e;white-space:normal;overflow-wrap:anywhere;line-height:1.25}
+#view-inventory .tc-erp-location.is-empty{background:#f7f8fa;border-color:#e6e9ed;color:#9aa7b3}
+#view-inventory .tc-erp-cost{display:block;white-space:nowrap;font-size:12px;font-weight:780;color:#30465c;font-variant-numeric:tabular-nums}
+#view-inventory .tc-erp-stock{font-size:16px;font-weight:800;color:#1d3953;font-variant-numeric:tabular-nums}
+#view-inventory .tc-erp-stock small{font-weight:650;font-size:9px;color:#8094a7}
+#view-inventory .tc-erp-minmax{display:block;font-weight:750;font-variant-numeric:tabular-nums;font-size:11px}
+#view-inventory .tc-erp-fill{display:block;width:80px;height:5px;border-radius:6px;background:#e9eff5;overflow:hidden;margin-top:7px}
+#view-inventory .tc-erp-fill i{display:block;height:100%;border-radius:6px;background:#39ad88}
+#view-inventory tr[data-stock-state="low"] .tc-erp-fill i{background:#d6a04d}
+#view-inventory tr[data-stock-state="zero"] .tc-erp-fill i{background:#d26979}
+#view-inventory tr[data-stock-state="high"] .tc-erp-fill i{background:#5389c9}
+#view-inventory .tc-spark-cell{display:flex;flex-direction:column;gap:1px;align-items:flex-start;max-width:128px}
+#view-inventory .tc-spark-cell svg{display:block;width:106px;height:29px;overflow:visible}
+#view-inventory .tc-spark-cell svg polyline{fill:none;stroke:#198e79;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#view-inventory .tc-spark-cell svg circle{fill:#198e79}
+#view-inventory .tc-spark-cell small{font-size:9px;color:#75899b;white-space:nowrap}
+#view-inventory .tc-spark-cell .tc-no-usage{color:#abb6c1;font-weight:650;font-size:10px}
+#view-inventory .pill{font-size:10px;padding:5px 8px;white-space:nowrap}
+#view-inventory .tc-erp-actions{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+#view-inventory .tc-erp-actions .btn{font-size:10px;padding:6px 7px;border-radius:6px;font-weight:750;box-shadow:none}
+#view-inventory .tc-erp-actions .btn.tc-erp-icon{padding:5px 7px;min-width:30px;justify-content:center}
+#view-inventory .table-bottom{background:#fff}
+#view-moves .data-table th,#view-reorder .data-table th,#view-dashboard .data-table th,#view-equipment .data-table th{background:#f7f9fc;color:#6f8293}
+#view-moves .data-table td,#view-reorder .data-table td,#view-dashboard .data-table td,#view-equipment .data-table td{border-bottom-color:#edf2f6}
+#view-moves .data-table tbody tr:hover,#view-reorder .data-table tbody tr:hover,#view-dashboard .data-table tbody tr:hover,#view-equipment .data-table tbody tr:hover{background:#f5f9fd}
+#view-moves .filters,#view-reorder .filters{background:#fff}
+@media(max-width:1180px){.content{padding:22px 22px 48px}#view-inventory .tc-erp-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.content{padding:17px 12px 40px}.sidebar{gap:12px}.sidebar .nav-btn{padding:9px 11px}#view-inventory .tc-erp-metrics{gap:8px}#view-inventory .tc-erp-metric{padding:12px}#view-inventory .tc-erp-metric strong{font-size:20px}#view-inventory .filters{padding:10px}#view-inventory .tc-erp-quickfilters{padding:0 10px 10px}#view-inventory .data-table th,#view-inventory .data-table td{padding-left:9px;padding-right:9px}}
