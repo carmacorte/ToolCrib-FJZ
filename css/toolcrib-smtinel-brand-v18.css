@@ -1,0 +1,40 @@
+/* Tool Crib x SMTiNEL official brand integration | V18.
+   Original images copied from carmacorte/SMTinel. No external image requests.
+   Keep the barcode Tool Crib identity; display SMTiNEL as parent ecosystem. */
+.sidebar .tc-smtinel-sidebar{
+ display:flex;align-items:center;gap:10px;
+ margin:-14px 7px 0;padding:10px 11px;min-width:0;
+ border:1px solid rgba(128,160,129,.27);
+ border-radius:11px;
+ background:linear-gradient(110deg,rgba(79,106,76,.14),rgba(25,41,56,.22));
+ color:#eaf2ec;text-decoration:none;
+ transition:border-color .16s ease,background .16s ease;
+}
+.sidebar .tc-smtinel-sidebar:hover,.sidebar .tc-smtinel-sidebar:focus-visible{
+ background:linear-gradient(110deg,rgba(91,137,95,.23),rgba(32,57,70,.3));
+ border-color:rgba(151,184,157,.56);
+}
+.tc-smtinel-sidebar img{display:block;width:38px;height:42px;object-fit:contain;flex:0 0 38px}
+.tc-smtinel-sidebar span{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tc-smtinel-sidebar small{display:block;color:#a8c3b1;font-size:8px;letter-spacing:1.2px;font-weight:800;line-height:1.2}
+.tc-smtinel-sidebar strong{display:block;color:#f1f8f2;font-size:15px;letter-spacing:.3px;line-height:1.12}
+.tc-smtinel-sidebar small:last-child{font-size:8px;color:#99b5ad;letter-spacing:.55px;white-space:nowrap}
+.top-actions .tc-smtinel-top{
+ display:inline-flex;align-items:center;gap:7px;
+ text-decoration:none;color:#31513a;font-weight:800;font-size:11px;
+ letter-spacing:.3px;white-space:nowrap;
+ height:32px;padding:4px 10px 4px 6px;
+ border:1px solid #d7e5d9;background:#f4f8f4;border-radius:9px;
+ transition:background .16s ease,border-color .16s ease;
+}
+.top-actions .tc-smtinel-top:hover,.top-actions .tc-smtinel-top:focus-visible{background:#e9f1e9;border-color:#93b99c}
+.tc-smtinel-top img{display:block;width:24px;height:24px;object-fit:contain}
+@media(max-width:760px){
+ .sidebar .tc-smtinel-sidebar{display:none}
+ .top-actions .tc-smtinel-top{height:29px;padding:3px 7px 3px 4px;font-size:10px}
+ .tc-smtinel-top img{height:22px;width:22px}
+}
+@media(max-width:410px){
+ .top-actions .tc-smtinel-top{gap:0;padding:2px 5px}
+ .top-actions .tc-smtinel-top span{display:none}
+}
