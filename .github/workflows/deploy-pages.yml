@@ -39,6 +39,11 @@ jobs:
             mkdir -p _site/assets
             cp -R assets/materials _site/assets/materials
           fi
+          # Ship official SMTiNEL logos locally so the application has no cross-site dependency.
+          if [ -d assets/branding ]; then
+            mkdir -p _site/assets/branding
+            cp -R assets/branding/. _site/assets/branding/
+          fi
           if [ -f data/materials-images.json ]; then
             mkdir -p _site/data
             cp data/materials-images.json _site/data/materials-images.json
