@@ -323,11 +323,8 @@
 <body>
 <div class="app">
 <aside class="sidebar" id="operation-menu">
- <div class="brand"><div class="brand-icon">▥</div><div><strong>Tool Crib</strong><small>FJZ / INVENTORY</small></div></div>
- <a class="tc-smtinel-sidebar" href="https://smtinel.com/" target="_blank" rel="noopener noreferrer" title="Abrir SMTinel" aria-label="SMTinel, sitio oficial (abre en otra pestaña)">
-   <img src="assets/branding/smtinel-emblem.png?v=18-1" alt="Escudo oficial de SMTinel" width="38" height="42" decoding="async">
-   <span><small>ECOSISTEMA DIGITAL</small><strong>SMTinel</strong><small>TRACE · MONITOR · PROTECT</small></span>
- </a>
+ <div class="brand"><a href="https://smtinel.com/" target="_blank" rel="noopener noreferrer" aria-label="Abrir SMTinel en otra pestaña"><img src="assets/branding/smtinel-emblem.png?v=18-1" width="42" height="46" style="display:block;object-fit:contain" alt="SMTinel"></a><div><strong>Tool Crib</strong><small>FJZ / INVENTORY</small></div></div>
+ 
  <div><div class="nav-label">OPERACIÓN</div><nav class="nav-group" aria-label="Navegación principal">
   <button class="nav-btn active" data-nav="dashboard"><span class="sym">◫</span> Resumen general</button>
   <button class="nav-btn" data-nav="inventory"><span class="sym">▤</span> Inventario</button>
@@ -340,7 +337,7 @@
  <div class="sidebar-foot"><strong><span class="status-dot"></span>Archivo independiente</strong><small>Sin servidor ni internet. Información en el navegador de esta PC.</small><small style="margin-top:8px" id="sidebar-version">Versión 12.0 · Gavetas animadas + Excel</small></div>
 </aside>
 <div class="main">
- <header class="topbar"><div class="crumb"><button type="button" id="menu-toggle" aria-controls="operation-menu" aria-label="Ocultar menú" aria-expanded="true">☰</button>FJZ <span style="padding:0 8px;color:#bed0df">/</span> <strong id="crumb-name">Resumen general</strong></div><div class="top-actions"><a class="tc-smtinel-top" href="https://smtinel.com/" target="_blank" rel="noopener noreferrer" title="SMTinel · Sitio oficial" aria-label="Abrir SMTinel en una nueva pestaña"><img src="assets/branding/smtinel-icon.png?v=18-1" alt="" width="24" height="24" decoding="async"><span>SMTinel</span></a><span class="offline">◉ Datos locales · Sin servidor</span><span class="avatar">TC</span></div></header>
+ <header class="topbar"><div class="crumb"><button type="button" id="menu-toggle" aria-controls="operation-menu" aria-label="Ocultar menú" aria-expanded="true">☰</button>FJZ <span style="padding:0 8px;color:#bed0df">/</span> <strong id="crumb-name">Resumen general</strong></div><div class="top-actions"><span class="offline">◉ Datos locales · Sin servidor</span><span class="avatar">TC</span></div></header>
  <div class="content">
  <section class="view active" id="view-dashboard">
   <div class="page-head"><div><div class="eyebrow">CONTROL DE MATERIALES · TOOL CRIB</div><h1>Resumen de inventario</h1><p>Existencias, niveles mínimos y alertas de refacciones en un solo lugar.</p></div><div class="action-bar"><span id="mode-indicator" class="help-tag">SIN DATOS DE STOCK</span><button class="btn" data-nav="locations">▦ Ver mapa interactivo</button><button class="btn" data-action="export-manager">↧ Reporte gerencial Excel</button><button class="btn primary" data-action="new-item">＋ Nuevo material</button></div></div>
