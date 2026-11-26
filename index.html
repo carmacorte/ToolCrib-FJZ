@@ -293,10 +293,36 @@
 <link rel="stylesheet" href="css/toolcrib-smtinel-brand-v18.css?v=18-1" />
 <link rel="icon" type="image/png" sizes="192x192" href="assets/branding/smtinel-icon.png?v=18-1">
 <link rel="apple-touch-icon" sizes="192x192" href="assets/branding/smtinel-icon.png?v=18-1">
+<style>
+.sidebar[hidden]{display:none}
+.topbar .crumb{display:flex;align-items:center}
+#menu-toggle{margin-right:10px;border:1px solid #cfdae6;border-radius:6px;background:white;color:#234564;padding:5px 9px;font-size:17px}
+@media(min-width:761px){
+.sidebar{width:clamp(164px,15vw,222px);flex-basis:clamp(164px,15vw,222px);padding:18px 10px;gap:15px}
+.topbar{height:52px}.content{padding:18px clamp(12px,1.5vw,24px) 40px}
+#view-inventory .data-table{width:100%;min-width:920px}
+#view-inventory .data-table thead th:nth-child(1){width:12%}
+#view-inventory .data-table thead th:nth-child(2){width:14%}
+#view-inventory .data-table thead th:nth-child(3){width:9%}
+#view-inventory .data-table thead th:nth-child(4){width:10%}
+#view-inventory .data-table thead th:nth-child(5){width:8%}
+#view-inventory .data-table thead th:nth-child(6){width:6%}
+#view-inventory .data-table thead th:nth-child(7){width:8%}
+#view-inventory .data-table thead th:nth-child(8){width:10%}
+#view-inventory .data-table thead th:nth-child(9){width:10%}
+#view-inventory .data-table thead th:nth-child(10){width:13%}
+#view-inventory .data-table td,#view-inventory .data-table .sort-head .sort-btn{padding:7px 5px}
+#view-inventory .data-table .sort-head .sort-btn{white-space:normal;gap:2px}
+#view-inventory .tc-spark-cell svg,#view-inventory .tc-erp-fill{max-width:100%}
+#view-inventory .pill,#view-inventory .tc-erp-cost{white-space:normal;overflow-wrap:anywhere}
+#view-inventory .tc-material-cell>.tc-photo{width:32px;height:32px;margin-right:4px}
+#view-inventory .tc-erp-metric{padding:12px}
+}
+</style>
 </head>
 <body>
 <div class="app">
-<aside class="sidebar">
+<aside class="sidebar" id="operation-menu">
  <div class="brand"><div class="brand-icon">▥</div><div><strong>Tool Crib</strong><small>FJZ / INVENTORY</small></div></div>
  <a class="tc-smtinel-sidebar" href="https://smtinel.com/" target="_blank" rel="noopener noreferrer" title="Abrir SMTinel" aria-label="SMTinel, sitio oficial (abre en otra pestaña)">
    <img src="assets/branding/smtinel-emblem.png?v=18-1" alt="Escudo oficial de SMTinel" width="38" height="42" decoding="async">
@@ -314,7 +340,7 @@
  <div class="sidebar-foot"><strong><span class="status-dot"></span>Archivo independiente</strong><small>Sin servidor ni internet. Información en el navegador de esta PC.</small><small style="margin-top:8px" id="sidebar-version">Versión 12.0 · Gavetas animadas + Excel</small></div>
 </aside>
 <div class="main">
- <header class="topbar"><div class="crumb">FJZ <span style="padding:0 8px;color:#bed0df">/</span> <strong id="crumb-name">Resumen general</strong></div><div class="top-actions"><a class="tc-smtinel-top" href="https://smtinel.com/" target="_blank" rel="noopener noreferrer" title="SMTinel · Sitio oficial" aria-label="Abrir SMTinel en una nueva pestaña"><img src="assets/branding/smtinel-icon.png?v=18-1" alt="" width="24" height="24" decoding="async"><span>SMTinel</span></a><span class="offline">◉ Datos locales · Sin servidor</span><span class="avatar">TC</span></div></header>
+ <header class="topbar"><div class="crumb"><button type="button" id="menu-toggle" aria-controls="operation-menu" aria-label="Ocultar menú" aria-expanded="true">☰</button>FJZ <span style="padding:0 8px;color:#bed0df">/</span> <strong id="crumb-name">Resumen general</strong></div><div class="top-actions"><a class="tc-smtinel-top" href="https://smtinel.com/" target="_blank" rel="noopener noreferrer" title="SMTinel · Sitio oficial" aria-label="Abrir SMTinel en una nueva pestaña"><img src="assets/branding/smtinel-icon.png?v=18-1" alt="" width="24" height="24" decoding="async"><span>SMTinel</span></a><span class="offline">◉ Datos locales · Sin servidor</span><span class="avatar">TC</span></div></header>
  <div class="content">
  <section class="view active" id="view-dashboard">
   <div class="page-head"><div><div class="eyebrow">CONTROL DE MATERIALES · TOOL CRIB</div><h1>Resumen de inventario</h1><p>Existencias, niveles mínimos y alertas de refacciones en un solo lugar.</p></div><div class="action-bar"><span id="mode-indicator" class="help-tag">SIN DATOS DE STOCK</span><button class="btn" data-nav="locations">▦ Ver mapa interactivo</button><button class="btn" data-action="export-manager">↧ Reporte gerencial Excel</button><button class="btn primary" data-action="new-item">＋ Nuevo material</button></div></div>
@@ -2083,5 +2109,24 @@ refresh();
 </script>
 <script src="js/drawer-sequence-v13.js"></script>
 <script src="js/cabinet-3d-v15.js?v=15-8-internal-dividers"></script>
+<script>
+(function(){
+ const menu=document.getElementById('operation-menu');
+ const button=document.getElementById('menu-toggle');
+ function showMenu(open){
+  menu.hidden=!open;
+  button.setAttribute('aria-expanded',String(open));
+  button.title=open?'Ocultar menú':'Mostrar menú';
+  button.setAttribute('aria-label',button.title);
+ }
+ let open=window.innerWidth>=1320;
+ try{const saved=sessionStorage.getItem('tc-sidebar-open');if(saved!==null)open=saved==='true'}catch{}
+ showMenu(open);
+ button.addEventListener('click',function(){
+  showMenu(menu.hidden);
+  try{sessionStorage.setItem('tc-sidebar-open',String(!menu.hidden))}catch{}
+ });
+})();
+</script>
 </body>
 </html>
