@@ -319,11 +319,32 @@
 #view-inventory .tc-erp-metric{padding:12px}
 }
 </style>
+<style>
+#view-inventory summary{cursor:pointer;color:#265581;font-weight:650;padding:7px 2px}
+#view-inventory .tc-erp-actions{display:grid;gap:4px}
+#view-inventory .tc-material-cell{white-space:normal;display:flow-root}
+#view-inventory .tc-photo-btn{white-space:normal}
+@media(min-width:761px){
+#view-inventory .data-table thead th:nth-child(1){width:13%}
+#view-inventory .data-table thead th:nth-child(2){width:17%}
+#view-inventory .data-table thead th:nth-child(3){width:10%}
+#view-inventory .data-table thead th:nth-child(4){width:11%}
+#view-inventory .data-table thead th:nth-child(5){width:8%}
+#view-inventory .data-table thead th:nth-child(6){width:6%}
+#view-inventory .data-table thead th:nth-child(7){width:7%}
+#view-inventory .data-table thead th:nth-child(8){width:10%}
+#view-inventory .data-table thead th:nth-child(9){width:10%}
+#view-inventory .data-table thead th:nth-child(10){width:8%}
+#view-inventory .data-table .sort-head .sort-btn{justify-content:flex-start;gap:3px;letter-spacing:0}
+#view-inventory .tc-material-cell>.tc-photo{float:none;display:block;margin-bottom:3px}
+#view-inventory .data-table td{padding:9px 6px}
+}
+</style>
 </head>
 <body>
 <div class="app">
 <aside class="sidebar" id="operation-menu">
- <div class="brand"><a href="https://smtinel.com/" target="_blank" rel="noopener noreferrer" aria-label="Abrir SMTinel en otra pestaña"><img src="assets/branding/smtinel-emblem.png?v=18-1" width="42" height="46" style="display:block;object-fit:contain" alt="SMTinel"></a><div><strong>Tool Crib</strong><small>FJZ / INVENTORY</small></div></div>
+ <div class="brand"><img src="assets/branding/smtinel-emblem.png?v=18-1" width="42" height="46" style="display:block;object-fit:contain" alt="SMTinel"><div><strong>Tool Crib</strong><small>FJZ / INVENTORY</small></div></div>
  
  <div><div class="nav-label">OPERACIÓN</div><nav class="nav-group" aria-label="Navegación principal">
   <button class="nav-btn active" data-nav="dashboard"><span class="sym">◫</span> Resumen general</button>
@@ -908,10 +929,10 @@ function renderInventory(){
    <td><span class="tc-erp-minmax">${niceNum(x.min)} / ${niceNum(x.max)}</span><span class="tc-erp-fill" aria-label="Porcentaje del stock máximo"><i style="width:${filled.toFixed(1)}%"></i></span></td>
    <td>${tcErpSpark(x,consumption)}</td>
    <td>${badge(x)}</td>
-   <td><div class="tc-erp-actions"><button class="btn small tc-erp-icon" data-action="edit-item" data-id="${id}" aria-label="Editar ${sku}" title="Editar ${sku}">✎</button>
-    <button class="btn small tc-erp-icon" data-action="move-item" data-id="${id}" aria-label="Registrar movimiento para ${sku}" title="Entradas y salidas" ${x.archived?'disabled':''}>⇄</button>
-    <button class="btn small tc-erp-icon" data-storage-action="find" data-id="${id}" aria-label="Localizar ${sku}" title="Abrir ubicación digital" ${!x.location||x.archived?'disabled':''}>⌖</button>
-    <button class="btn small tc-erp-icon" data-action="archive-item" data-id="${id}" aria-label="${x.archived?'Restaurar':'Archivar'} ${sku}" title="${x.archived?'Restaurar':'Archivar'} ${sku}">${x.archived?'↺':'▧'}</button></div></td>
+   <td><details name="inventory-actions"><summary aria-label="Acciones para ${sku}">Opciones</summary><div class="tc-erp-actions"><button class="btn small tc-erp-icon" data-action="edit-item" data-id="${id}" aria-label="Editar ${sku}" title="Editar ${sku}">Editar</button>
+    <button class="btn small tc-erp-icon" data-action="move-item" data-id="${id}" aria-label="Registrar movimiento para ${sku}" title="Entradas y salidas" ${x.archived?'disabled':''}>Movimiento</button>
+    <button class="btn small tc-erp-icon" data-storage-action="find" data-id="${id}" aria-label="Localizar ${sku}" title="Abrir ubicación digital" ${!x.location||x.archived?'disabled':''}>Localizar</button>
+    <button class="btn small tc-erp-icon" data-action="archive-item" data-id="${id}" aria-label="${x.archived?'Restaurar':'Archivar'} ${sku}" title="${x.archived?'Restaurar':'Archivar'} ${sku}">${x.archived?'Restaurar':'Archivar'}</button></div></details></td>
   </tr>`;
  }).join(''):emptyRow(10,'No hay materiales para mostrar',db.items.length?'Modifica los filtros para encontrar registros.':'Crea tu primer SKU o importa una plantilla Excel.');
  $('inventory-count').textContent=`${niceNum(matches.length)} materiales${matches.length>250?' · primeros 250 visibles':''}`;
