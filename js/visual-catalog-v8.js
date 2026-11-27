@@ -19,14 +19,102 @@ async function getAll(){const d=await dbReady;return new Promise((ok,no)=>{const
 async function put(record){const d=await dbReady;return new Promise((ok,no)=>{const t=d.transaction('photos','readwrite');t.objectStore('photos').put(record);t.oncomplete=ok;t.onerror=()=>no(t.error)})}
 async function remove(sku){const d=await dbReady;return new Promise((ok,no)=>{const t=d.transaction('photos','readwrite');t.objectStore('photos').delete(sku);t.oncomplete=ok;t.onerror=()=>no(t.error)})}
 const dlg=document.getElementById('tc-photo-dialog'),preview=document.getElementById('tc-photo-preview');
+const publication = document.createElement('details');
+publication.innerHTML = `<summary class="btn">Publicar foto al catálogo</summary>
+ <p>La foto y el SKU serán públicos en carmacorte/ToolCrib-FJZ. Carga primero la fotografía que deseas compartir.</p>
+ <label>Token de GitHub para este repositorio (Contents: lectura y escritura)
+ <input type="password" autocomplete="off" spellcheck="false" placeholder="Solo para esta publicación"></label>
+ <button type="button" class="btn primary">Publicar en GitHub</button>
+ <p role="status" aria-live="polite"></p>`;
+dlg.querySelector('.tc-photo-actions').after(publication);
+const credential = publication.querySelector('input');
+const publishButton = publication.querySelector('button');
+const feedback = publication.querySelector('[role=status]');
+let publishing = false;
+dlg.addEventListener('close', () => {
+ credential.value = '';
+ publication.open = false;
+ feedback.textContent = '';
+});
+async function publishPhoto(sku, record, token) {
+ const repository = 'carmacorte/ToolCrib-FJZ';
+ const indexPath = 'data/materials-images.json';
+ const endpoint = 'https://api.github.com/repos/' + repository;
+ async function request(path, method = 'GET', body) {
+  const response = await fetch(endpoint + path, {
+   method, redirect:'error', cache:'no-store',
+   headers:{Authorization:'Bearer ' + token, Accept:'application/vnd.github+json','Content-Type':'application/json'},
+   body:body && JSON.stringify(body)
+  });
+  if (!response.ok) {
+   if ([401,403,404].includes(response.status)) throw Error('Verifica el token, su acceso al repositorio y el permiso Contents de escritura.');
+   if ([409,422].includes(response.status)) throw Error('La rama cambió o está protegida. Revisa el catálogo y vuelve a intentar.');
+   throw Error('GitHub respondió con el código ' + response.status);
+  }
+  return response.json();
+ }
+ if (!record?.image || !/^data:image\/(?:png|webp|jpeg);base64,/.test(record.image)) throw Error('Carga una fotografía local para este SKU.');
+ if (record.image.length > 4200000) throw Error('La fotografía supera los 3 MB.');
+ // Re-encode only the pixels, omitting embedded camera metadata.
+ const photo = new Image();
+ photo.src = record.image;
+ await photo.decode();
+ const scale = Math.min(1, 1600 / Math.max(photo.width, photo.height));
+ const canvas = document.createElement('canvas');
+ canvas.width = Math.max(1, Math.round(photo.width * scale));
+ canvas.height = Math.max(1, Math.round(photo.height * scale));
+ canvas.getContext('2d').drawImage(photo, 0, 0, canvas.width, canvas.height);
+ const encoded = canvas.toDataURL('image/webp', 0.9);
+ const ext = encoded.startsWith('data:image/webp;') ? 'webp' : 'png';
+ const head = await request('/git/ref/heads/main');
+ const base = await request('/git/commits/' + head.object.sha);
+ const file = await request('/contents/' + indexPath + '?ref=' + head.object.sha);
+ const bytes = Uint8Array.from(atob(file.content), c => c.charCodeAt(0));
+ const manifest = JSON.parse(new TextDecoder().decode(bytes));
+ const blob = await request('/git/blobs', 'POST', {encoding:'base64', content:encoded.split(',')[1]});
+ const folder = /^[A-Z0-9_-][A-Z0-9._-]{0,99}$/.test(sku) ? sku :
+  '~' + Array.from(new TextEncoder().encode(sku), b => b.toString(16).padStart(2,'0')).join('');
+ const path = 'assets/materials/' + folder + '/' + blob.sha + '.' + ext;
+ const previous = Object.hasOwn(manifest, sku) ? manifest[sku] : {};
+ const entry = {main:path, gallery:previous.gallery || [], verified:record.verified === true, sample:false};
+ if (previous.main === path && previous.verified === entry.verified && previous.sample === false) return entry;
+ const next = {...manifest, [sku]:entry};
+ const tree = await request('/git/trees', 'POST', {base_tree:base.tree.sha,tree:[
+  {path,mode:'100644',type:'blob',sha:blob.sha},
+  {path:indexPath,mode:'100644',type:'blob',content:JSON.stringify(next,null,2)+'\n'}
+ ]});
+ const commit = await request('/git/commits','POST',{message:'Actualizar fotografía de ' + sku, tree:tree.sha, parents:[head.object.sha]});
+ await request('/git/refs/heads/main','PATCH',{sha:commit.sha,force:false});
+ return entry;
+}
+publishButton.addEventListener('click', async () => {
+ if (publishing) return;
+ const sku = active, record = records[sku], token = credential.value.trim();
+ if (!token) {feedback.textContent = 'Ingresa el token de publicación.';return}
+ credential.value = '';
+ publishing = true;
+ publishButton.disabled = true;
+ feedback.textContent = 'Publicando fotografía…';
+ try {
+  const entry = await publishPhoto(sku, record, token);
+  demoManifest[sku] = entry;
+  if (active === sku) feedback.textContent = 'Foto publicada. Las demás estaciones la verán al actualizar Inventory después del despliegue.';
+ } catch (error) {
+  if (active === sku) feedback.textContent = 'No se confirmó la publicación. ' + error.message;
+ } finally {
+  publishing = false;
+  publishButton.disabled = false;
+ }
+});
+
 function show(){
- const r=records[active],url=imageFor(active),demo=!!sampleUrl(active)&&!r?.image;
+ const r=records[active],url=imageFor(active),demo=demoManifest[active]?.sample===true&&!r?.image;
  document.getElementById('tc-photo-sku').textContent=active+(demo?' · Imagen ilustrativa (DEMO)':'');
  preview.hidden=!url;
  preview.removeAttribute('src');
  if(url)preview.src=url;
  document.getElementById('tc-photo-empty').hidden=!!url;
- const check=document.getElementById('tc-photo-verified');check.checked=!!r?.verified;check.disabled=!r?.image;
+ const check=document.getElementById('tc-photo-verified');check.checked=r?.image ? !!r.verified : !!demoManifest[active]?.verified;check.disabled=!r?.image;
  document.getElementById('tc-photo-remove').disabled=!r?.image;
 }
 function decorate(){
@@ -38,7 +126,7 @@ function decorate(){
    b.textContent='Foto';b.title='Abrir catálogo visual';
    b.addEventListener('click',()=>{active=sku;show();dlg.showModal()});td.append(b)
   }
-  const old=td.querySelector('.tc-photo'),r=records[sku],url=imageFor(sku),demo=!r?.image&&!!sampleUrl(sku);
+  const old=td.querySelector('.tc-photo'),r=records[sku],url=imageFor(sku),demo=!r?.image&&demoManifest[sku]?.sample===true;
   if(url){
    let img=old;if(!img){img=document.createElement('img');img.className='tc-photo';td.prepend(img)}
    if(img.getAttribute('src')!==url)img.src=url;
@@ -51,7 +139,7 @@ function decorate(){
 function decorateMap(){
  const cards=document.querySelectorAll('#view-locations .storage-sku-card');
  cards.forEach(card=>{
-  const sku=normalize(card.querySelector('strong')?.textContent),url=imageFor(sku),demo=!!sampleUrl(sku)&&!records[sku]?.image;
+  const sku=normalize(card.querySelector('strong')?.textContent),url=imageFor(sku),demo=demoManifest[sku]?.sample===true&&!records[sku]?.image;
   let wrap=card.querySelector('.tc-map-material-photo');
   if(!url){wrap?.remove();return}
   if(!wrap){
@@ -92,7 +180,7 @@ if(target){new MutationObserver(decorate).observe(target,{childList:true});decor
  if(root)new MutationObserver(decorateMap).observe(root,{childList:true});
 });
 document.getElementById('tc-photo-close').onclick=()=>dlg.close();
-document.getElementById('tc-photo-upload').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>3*1024*1024){alert('Usa JPG, PNG o WebP de máximo 3 MB.');return}const reader=new FileReader();reader.onload=async()=>{records[active]={sku:active,image:reader.result,verified:false};await put(records[active]);show();decorate();decorateMap()};reader.readAsDataURL(f);e.target.value=''};
+document.getElementById('tc-photo-upload').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>3*1024*1024){alert('Usa JPG, PNG o WebP de máximo 3 MB.');return}const sku=active;const reader=new FileReader();reader.onload=async()=>{records[sku]={sku,image:reader.result,verified:false};await put(records[sku]);show();decorate();decorateMap()};reader.readAsDataURL(f);e.target.value=''};
 document.getElementById('tc-photo-verified').onchange=async e=>{if(!records[active]?.image){e.target.checked=false;return}records[active].verified=e.target.checked;await put(records[active]);decorate();decorateMap()};
 document.getElementById('tc-photo-remove').onclick=async()=>{
  if(!records[active]?.image)return;
@@ -108,8 +196,9 @@ fetch('data/materials-images.json',{cache:'no-cache'}).then(response=>{
 }).then(manifest=>{
  // Only automatically display material illustrations explicitly marked as demo.
  demoManifest=Object.fromEntries(Object.entries(manifest).filter(([sku,data])=>
-   sku.startsWith('DEMO-')&&data?.sample===true&&typeof data.main==='string'&&/^assets\/materials\/demo\/[a-zA-Z0-9._-]+\.webp$/.test(data.main)
+   data?.sample!==true && /^assets\/materials\/[~a-zA-Z0-9_-][a-zA-Z0-9._-]*\/[a-zA-Z0-9_-]+\.(webp|png|jpe?g)$/i.test(data?.main) || sku.startsWith('DEMO-')&&data?.sample===true&&typeof data.main==='string'&&/^assets\/materials\/demo\/[a-zA-Z0-9._-]+\.webp$/.test(data.main)
  ));
  decorate();decorateMap();
 }).catch(err=>console.info('Sin fotografías ilustrativas del repositorio:',err.message));
 })();
+
